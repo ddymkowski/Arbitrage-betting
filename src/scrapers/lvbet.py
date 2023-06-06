@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -31,20 +32,33 @@ class LvBetScrapper(BaseScrapper):
             self.BASE_API_URL + date_parameters
         )  # TODO use async client for consistency
         data = response.json()
+        return data
+
+    def transform_data(self, raw_data: T) -> ParsedDatasetModel:
         data_points = [
             entry
-            for entry in data["primary_column_markets"]
+            for entry in raw_data["primary_column_markets"]
             if entry["name"] == "Match Result"
         ]
-        return data_points
+
+        matches_event_datetimes = [
+            {"match_id": match["match_id"], "event_time": match["date"]}
+            for match in raw_data["matches"]
+        ]
+
+        bet_info_with_event_time = defaultdict(dict)
+        for match in data_points + matches_event_datetimes:
+            bet_info_with_event_time[match["match_id"]].update(match)
+
+        complete_data = list(bet_info_with_event_time.values())
+
+        return super().transform_data(complete_data)
 
     def _parse_raw_datapoint(
         self, raw_match: dict[Any, Any], scrape_timestamp: datetime
-    ) -> ParsedDatasetModel:
-        # TODO find endpoint with match event time
-        PLACEHOLDER = datetime.utcnow()
+    ) -> ScrapeResultModel:
         return ScrapeResultModel(
-            event_time=PLACEHOLDER,
+            event_time=raw_match["event_time"],
             team_a=raw_match["selections"][0]["label"],
             team_b=raw_match["selections"][2]["label"],
             bet_options={
@@ -67,3 +81,10 @@ class LvBetScrapper(BaseScrapper):
 async def main() -> None:
     lvbet = LvBetScrapper()
     await lvbet.scrape()
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())

@@ -35,6 +35,10 @@ class BaseScrapper(ABC, Generic[T]):
     async def acquire_data(self) -> T:
         pass
 
+    @abstractmethod
+    def _parse_raw_datapoint(self) -> ScrapeResultModel:
+        pass
+
     def transform_data(self, raw_data: T) -> ParsedDatasetModel:
         standardized_api_data: list[ScrapeResultModel] = self._standardize_api_data(
             raw_data
@@ -54,10 +58,6 @@ class BaseScrapper(ABC, Generic[T]):
             f"ID: {transformed_data.scrape_id} Saving: {len(transformed_data.data)} data points."
         )
         self._database.insert_bulk(transformed_data)
-
-    @abstractmethod
-    def _parse_raw_datapoint(self) -> ScrapeResultModel:
-        pass
 
     def _standardize_api_data(
         self, raw_data: list[dict[Any, Any]]
