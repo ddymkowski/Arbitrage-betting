@@ -9,7 +9,7 @@ from uuid import uuid4
 from pydantic import ValidationError
 
 from src.scrapers.schemas.base import ParsedDatasetModel, ScrapeResultModel
-from src.storage.data_access import SqliteRepository
+from src.storage.data_access.sqlite import SqliteRepository
 
 logging.basicConfig(
     format="%(asctime)s | %(name)s | %(funcName)s | %(levelname)s: %(message)s",
@@ -40,7 +40,7 @@ class BaseScrapper(ABC):
     def save_data_to_database(self, data: ParsedDatasetModel) -> None:
         self._logger.info(f"ID: {data.scrape_id} Saving: {len(data.data)} data points.")
         db = SqliteRepository()
-        db.add(data)
+        db.add_bulk(data)
 
     def _standardize_api_data(
         self, raw_data: list[dict[Any, Any]], scrapping_start_timestamp: datetime
