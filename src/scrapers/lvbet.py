@@ -1,15 +1,17 @@
+from datetime import datetime, timedelta
+from typing import Any
+
 import requests
 
-from src.scrapers.base import BaseScrapper
-from src.enums import Bookmaker
-from datetime import datetime, timedelta
 from src.constants import LV_BET_DAYS_TO_SCRAPE
-from src.scrapers.schemas.base import ParsedDatasetModel
-from typing import Any
+from src.engine.models import Odds
+from src.enums import Bookmaker, FootballOutcome
+from src.scrapers.base import BaseScrapper
+from src.scrapers.schemas.base import ScrapeResultModel
 
 
 class LvBetScrapper(BaseScrapper):
-    BASE_API_URL = f"https://offer.lvbet.pl/client-api/v3/matches/competition-view/?lang=en&sports_groups_ids=1&sports_groups_ids=36530&sports_groups_ids=37609"
+    BASE_API_URL = "https://offer.lvbet.pl/client-api/v3/matches/competition-view/?lang=en&sports_groups_ids=1&sports_groups_ids=36530&sports_groups_ids=37609"
     BOOKMAKER_NAME = Bookmaker.LVBET
 
     @staticmethod
@@ -23,36 +25,47 @@ class LvBetScrapper(BaseScrapper):
         parameters = f"&date_from={s_date_from}&date_to={s_date_to}"
         return parameters
 
-    @staticmethod
-    def fetch_relevant_data(response: requests.models.Response):
-        data_points = []
-        data = response.json()
-        print(data['primary_column_markets'][0])
-        return [entry for entry in data['primary_column_markets'] if 'Match Result' in entry]
-
-    def scrape(self):
+    async def get_raw_api_data(self):
         date_parameters = self._get_request_timeframe()
-        url = self.BASE_API_URL + date_parameters
+        response = requests.get(
+            self.BASE_API_URL + date_parameters
+        )  # TODO use async client for consistency
+        data = response.json()
+        data_points = [
+            entry
+            for entry in data["primary_column_markets"]
+            if entry["name"] == "Match Result"
+        ]
+        return data_points
 
-        response = requests.get(url)
+    @staticmethod
+    def parse_raw_datapoint(
+        raw_match: dict[Any, Any],
+        scrape_timestamp: datetime,
+    ) -> ScrapeResultModel:
+        # TODO find endpoint with match event time
+        PLACEHOLDER = datetime.utcnow()
+        return ScrapeResultModel(
+            event_time=PLACEHOLDER,
+            team_a=raw_match["selections"][0]["label"],
+            team_b=raw_match["selections"][2]["label"],
+            bet_options={
+                FootballOutcome.TEAM_A_WINS: Odds(
+                    odds=raw_match["selections"][0]["rate"]["decimal"],
+                    last_update=scrape_timestamp,
+                ),
+                FootballOutcome.DRAW: Odds(
+                    odds=raw_match["selections"][1]["rate"]["decimal"],
+                    last_update=scrape_timestamp,
+                ),
+                FootballOutcome.TEAM_B_WINS: Odds(
+                    odds=raw_match["selections"][2]["rate"]["decimal"],
+                    last_update=scrape_timestamp,
+                ),
+            },
+        )
 
-        if response.status_code == 200:
-            data = self.fetch_relevant_data(response)
-            print(data)
 
-
-
-        # for i in data['primary_column_markets']:
-        #     if i['match_id'] == 'bc:22384587' and i['name'] == 'Match Result':
-        #         print(i)
-        #         print('~~~~~~~~~~~~~~~~~~~~')
-
-
-    def save_data_to_database(self, data: ParsedDatasetModel, database: Any) -> None:
-        pass
-
-
-
-z = LvBetScrapper()
-
-z.scrape()
+async def main() -> None:
+    lvbet = LvBetScrapper()
+    await lvbet.scrape()

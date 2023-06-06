@@ -3,8 +3,9 @@ from math import ceil
 from pprint import pformat
 from typing import Optional
 
-from src.enums import Bookmaker, FootballOutcome, PotentialBetState
 from models import Bet, BetsSet, FootballMatch, Odds, Opportunity
+
+from src.enums import Bookmaker, FootballOutcome, PotentialBetState
 
 logging.basicConfig(
     format="%(asctime)s | %(name)s | %(funcName)s | %(levelname)s: %(message)s",

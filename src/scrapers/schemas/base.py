@@ -3,11 +3,11 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.enums import Bookmaker, FootballOutcome
 from src.engine.models import Odds
+from src.enums import Bookmaker, FootballOutcome
 
 
-class MatchModel(BaseModel):
+class ScrapeResultModel(BaseModel):
     event_time: datetime
     team_a: str
     team_b: str
@@ -22,7 +22,7 @@ class ParsedDatasetModel(BaseModel):
     source: Bookmaker
     scrape_start_timestamp: datetime
     scrape_end_timestamp: datetime
-    data: list[MatchModel]
+    data: list[ScrapeResultModel]
 
     # class Config:
     #     json_encoders = {datetime: lambda o: o.isoformat()}

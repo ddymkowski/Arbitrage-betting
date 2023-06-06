@@ -3,8 +3,8 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from engine import ArbitrageEngine
-from src.enums import Bookmaker, FootballOutcome
 from src.engine.models import BetOptions, FootballMatch, Odds
+from src.enums import Bookmaker, FootballOutcome
 
 
 class EntrypointDataModel(BaseModel):

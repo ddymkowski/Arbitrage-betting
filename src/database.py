@@ -1,12 +1,9 @@
-import uuid
 from datetime import datetime
 
 from sqlalchemy import Column, DateTime, String, create_engine
 from sqlalchemy.orm import as_declarative, declared_attr, sessionmaker
 
-from src.scrapers.utils import custom_json_serializer
-from src.scrapers.utils import generate_uuid
-
+from src.scrapers.utils.utils import custom_json_serializer, generate_uuid
 
 
 @as_declarative()
@@ -21,9 +18,7 @@ class Base:
 
 
 db_path = "../data.db"
-engine = create_engine(
-    f"sqlite:///{db_path}", json_serializer=custom_json_serializer
-)
+engine = create_engine(f"sqlite:///{db_path}", json_serializer=custom_json_serializer)
 
 SessionFactory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
