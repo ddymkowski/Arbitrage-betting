@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
+from functools import partial
 from typing import Any
 
 import requests
@@ -55,24 +56,25 @@ class LvBetScrapper(BaseScrapper):
         return super().transform_data(complete_data)
 
     def _parse_raw_datapoint(
-        self, raw_match: dict[Any, Any], scrape_timestamp: datetime
+        self, raw_match: dict[Any, Any]
     ) -> ScrapeResultModel:
+
+        odds_with_last_update = partial(Odds, last_update=self.scrapping_start_timestamp)
+
         return ScrapeResultModel(
             event_time=raw_match["event_time"],
             team_a=raw_match["selections"][0]["label"],
             team_b=raw_match["selections"][2]["label"],
             bet_options={
-                FootballOutcome.TEAM_A_WINS: Odds(
+                FootballOutcome.TEAM_A_WINS: odds_with_last_update(
                     odds=raw_match["selections"][0]["rate"]["decimal"],
-                    last_update=scrape_timestamp,
                 ),
-                FootballOutcome.DRAW: Odds(
+                FootballOutcome.DRAW: odds_with_last_update(
                     odds=raw_match["selections"][1]["rate"]["decimal"],
-                    last_update=scrape_timestamp,
                 ),
-                FootballOutcome.TEAM_B_WINS: Odds(
+                FootballOutcome.TEAM_B_WINS: odds_with_last_update(
                     odds=raw_match["selections"][2]["rate"]["decimal"],
-                    last_update=scrape_timestamp,
+
                 ),
             },
         )

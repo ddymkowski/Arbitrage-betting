@@ -8,6 +8,7 @@ from uuid import uuid4
 
 from pydantic import ValidationError
 
+from src.enums import Bookmaker
 from src.scrapers.schemas.base import ParsedDatasetModel, ScrapeResultModel
 from src.storage.data_access.base import BaseRepository
 from src.storage.data_access.sqlite import SqliteRepository
@@ -21,6 +22,8 @@ T = TypeVar("T")
 
 
 class BaseScrapper(ABC, Generic[T]):
+    BOOKMAKER_NAME = Bookmaker.NONE
+
     def __init__(self, database: BaseRepository = SqliteRepository()):
         self._logger = logging.getLogger(self.__class__.__qualname__)
         self._database = database
@@ -36,7 +39,7 @@ class BaseScrapper(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    def _parse_raw_datapoint(self) -> ScrapeResultModel:
+    def _parse_raw_datapoint(self, raw_match: dict[Any, Any]) -> ScrapeResultModel:
         pass
 
     def transform_data(self, raw_data: T) -> ParsedDatasetModel:
@@ -71,7 +74,6 @@ class BaseScrapper(ABC, Generic[T]):
                 standardized_data.append(
                     self._parse_raw_datapoint(
                         raw_match=raw_match_data,
-                        scrape_timestamp=self.scrapping_start_timestamp,
                     )
                 )
             except (ValidationError, IndexError, KeyError):

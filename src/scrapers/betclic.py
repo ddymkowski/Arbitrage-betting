@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+from functools import partial
 from typing import Any
 from uuid import UUID
 
@@ -42,22 +42,26 @@ class BetClicScrapper(BaseScrapper):
     def _parse_raw_datapoint(
         self,
         raw_match: dict[Any, Any],
-        scrape_timestamp: datetime,
     ) -> ScrapeResultModel:
         odds_section = raw_match["grouped_markets"][0]["markets"][0]["selections"]
+
+        odds_with_last_update = partial(
+            Odds, last_update=self.scrapping_start_timestamp
+        )
+
         return ScrapeResultModel(
             event_time=raw_match["date"],
             team_a=raw_match["contestants"][0]["name"],
             team_b=raw_match["contestants"][1]["name"],
             bet_options={
-                FootballOutcome.TEAM_A_WINS: Odds(
-                    odds=odds_section[0][0]["odds"], last_update=scrape_timestamp
+                FootballOutcome.TEAM_A_WINS: odds_with_last_update(
+                    odds=odds_section[0][0]["odds"]
                 ),
-                FootballOutcome.DRAW: Odds(
-                    odds=odds_section[1][0]["odds"], last_update=scrape_timestamp
+                FootballOutcome.DRAW: odds_with_last_update(
+                    odds=odds_section[1][0]["odds"]
                 ),
-                FootballOutcome.TEAM_B_WINS: Odds(
-                    odds=odds_section[2][0]["odds"], last_update=scrape_timestamp
+                FootballOutcome.TEAM_B_WINS: odds_with_last_update(
+                    odds=odds_section[2][0]["odds"]
                 ),
             },
         )
