@@ -15,7 +15,7 @@ class LvBetScrapper(BaseScrapper):
     BOOKMAKER_NAME = Bookmaker.LVBET
 
     @staticmethod
-    def _get_request_timeframe(days_to_scrape: int = LV_BET_DAYS_TO_SCRAPE):
+    def _get_request_timeframe(days_to_scrape: int = LV_BET_DAYS_TO_SCRAPE) -> str:
         now = datetime.utcnow()
         date_from = now - timedelta(hours=12)
         date_to = now + timedelta(days=days_to_scrape)
@@ -25,7 +25,7 @@ class LvBetScrapper(BaseScrapper):
         parameters = f"&date_from={s_date_from}&date_to={s_date_to}"
         return parameters
 
-    async def get_raw_api_data(self):
+    async def get_raw_api_data(self) -> dict[Any, Any]:
         date_parameters = self._get_request_timeframe()
         response = requests.get(
             self.BASE_API_URL + date_parameters

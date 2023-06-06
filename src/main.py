@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from engine import ArbitrageEngine
+from src.engine.engine import ArbitrageEngine
 from src.engine.models import BetOptions, FootballMatch, Odds
 from src.enums import Bookmaker, FootballOutcome
 
