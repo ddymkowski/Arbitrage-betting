@@ -55,11 +55,10 @@ class LvBetScrapper(BaseScrapper):
 
         return super().transform_data(complete_data)
 
-    def _parse_raw_datapoint(
-        self, raw_match: dict[Any, Any]
-    ) -> ScrapeResultModel:
-
-        odds_with_last_update = partial(Odds, last_update=self.scrapping_start_timestamp)
+    def _parse_raw_datapoint(self, raw_match: dict[Any, Any]) -> ScrapeResultModel:
+        odds_with_last_update = partial(
+            Odds, last_update=self.scrapping_start_timestamp
+        )
 
         return ScrapeResultModel(
             event_time=raw_match["event_time"],
@@ -74,7 +73,6 @@ class LvBetScrapper(BaseScrapper):
                 ),
                 FootballOutcome.TEAM_B_WINS: odds_with_last_update(
                     odds=raw_match["selections"][2]["rate"]["decimal"],
-
                 ),
             },
         )

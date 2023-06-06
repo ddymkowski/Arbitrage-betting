@@ -66,7 +66,6 @@ class BaseScrapper(ABC, Generic[T]):
         self, raw_data: list[dict[Any, Any]]
     ) -> list[ScrapeResultModel]:
         standardized_data = []
-        validation_errors = 0
         exceptions = []
 
         for raw_match_data in raw_data:
@@ -77,13 +76,13 @@ class BaseScrapper(ABC, Generic[T]):
                     )
                 )
             except (ValidationError, IndexError, KeyError):
-                validation_errors += 1
                 exceptions.append(traceback.format_exc())
 
-        self._logger.warning(f"Validation errors count: {validation_errors}.\n")
+        exceptions_count = len(exceptions)
+        self._logger.warning(f"Validation errors count: {exceptions_count}.\n")
         self._logger.info(f"Successfully parsed: {len(standardized_data)} matches.\n")
 
-        if validation_errors > 0.5 * len(raw_data):
+        if exceptions_count > (0.5 * len(raw_data)):
             self._logger.error(
                 "More than 50% of raw data could not be parsed properly check logs."
             )
