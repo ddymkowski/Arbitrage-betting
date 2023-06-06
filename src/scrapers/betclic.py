@@ -20,25 +20,7 @@ class BetClicScrapper(BaseScrapper):
     )
     BOOKMAKER_NAME = Bookmaker.BETCLIC
 
-    async def fetch_page(
-        self,
-        matches: list[dict[str, Any]],
-        session: ClientSession,
-        url: str,
-        scrape_id: UUID,
-    ) -> None:
-        async with session.get(url) as response:
-            json_response = await response.json()
-
-            if response.status == 200:
-                matches.extend(json_response["matches"])
-                return
-
-            self._logger.warning(
-                f"ID: {scrape_id} - {url}:{response.status} - {json_response}\n"
-            )
-
-    async def get_raw_api_data(
+    async def acquire_data(
         self, limit: int = BETCLIC_API_LIMIT, pages: int = BETCLIC_PAGES
     ):
         tasks = []
@@ -57,7 +39,7 @@ class BetClicScrapper(BaseScrapper):
             await asyncio.gather(*tasks)
         return matches
 
-    def parse_raw_datapoint(
+    def _parse_raw_datapoint(
         self,
         raw_match: dict[Any, Any],
         scrape_timestamp: datetime,
@@ -79,6 +61,24 @@ class BetClicScrapper(BaseScrapper):
                 ),
             },
         )
+
+    async def fetch_page(
+        self,
+        matches: list[dict[str, Any]],
+        session: ClientSession,
+        url: str,
+        scrape_id: UUID,
+    ) -> None:
+        async with session.get(url) as response:
+            json_response = await response.json()
+
+            if response.status == 200:
+                matches.extend(json_response["matches"])
+                return
+
+            self._logger.warning(
+                f"ID: {scrape_id} - {url}:{response.status} - {json_response}\n"
+            )
 
 
 async def main() -> None:

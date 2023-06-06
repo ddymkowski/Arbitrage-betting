@@ -1,9 +1,9 @@
 from src.storage.data_access.base import BaseRepository
 
 
-#TODO
+# TODO
 class MongoDbRepository(BaseRepository):
-    def add_bulk(self):
+    def insert_bulk(self):
         pass
 
     def get_bulk_by_insertion_timestamp(self):
@@ -11,4 +11,3 @@ class MongoDbRepository(BaseRepository):
 
     def delete_bulk(self):
         pass
-

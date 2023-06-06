@@ -6,8 +6,8 @@ import requests
 from src.constants import LV_BET_DAYS_TO_SCRAPE
 from src.engine.models import Odds
 from src.enums import Bookmaker, FootballOutcome
-from src.scrapers.base import BaseScrapper
-from src.scrapers.schemas.base import ScrapeResultModel
+from src.scrapers.base import BaseScrapper, T
+from src.scrapers.schemas.base import ParsedDatasetModel, ScrapeResultModel
 
 
 class LvBetScrapper(BaseScrapper):
@@ -25,7 +25,7 @@ class LvBetScrapper(BaseScrapper):
         parameters = f"&date_from={s_date_from}&date_to={s_date_to}"
         return parameters
 
-    async def get_raw_api_data(self) -> dict[Any, Any]:
+    async def acquire_data(self) -> T:
         date_parameters = self._get_request_timeframe()
         response = requests.get(
             self.BASE_API_URL + date_parameters
@@ -38,11 +38,9 @@ class LvBetScrapper(BaseScrapper):
         ]
         return data_points
 
-    @staticmethod
-    def parse_raw_datapoint(
-        raw_match: dict[Any, Any],
-        scrape_timestamp: datetime,
-    ) -> ScrapeResultModel:
+    def _parse_raw_datapoint(
+        self, raw_match: dict[Any, Any], scrape_timestamp: datetime
+    ) -> ParsedDatasetModel:
         # TODO find endpoint with match event time
         PLACEHOLDER = datetime.utcnow()
         return ScrapeResultModel(

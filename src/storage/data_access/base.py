@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class BaseRepository(ABC):
     @abstractmethod
-    def add_bulk(self):
+    def insert_bulk(self):
         pass
 
     @abstractmethod
