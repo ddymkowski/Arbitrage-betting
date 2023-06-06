@@ -8,7 +8,7 @@ class SqliteRepository(BaseRepository):
     def __init__(self):
         self.db = get_database()
 
-    def add_bulk(self, data: ParsedDatasetModel):
+    def insert_bulk(self, data: ParsedDatasetModel):
         data = Scrape(
             scrape_id=data.scrape_id.hex,
             source=data.source.value,

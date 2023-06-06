@@ -4,7 +4,7 @@ from enum import Enum
 class Bookmaker(str, Enum):
     BETCLIC = "BETCLIC"
     LVBET = "LVBET"
-    STS = "STS"
+    NONE = "N/A"
 
 
 class FootballOutcome(str, Enum):

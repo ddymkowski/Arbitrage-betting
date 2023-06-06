@@ -13,9 +13,6 @@ class ScrapeResultModel(BaseModel):
     team_b: str
     bet_options: dict[FootballOutcome, Odds]
 
-    # class Config:
-    #     json_encoders = {datetime: lambda o: o.isoformat()}
-
 
 class ParsedDatasetModel(BaseModel):
     scrape_id: UUID
@@ -23,7 +20,3 @@ class ParsedDatasetModel(BaseModel):
     scrape_start_timestamp: datetime
     scrape_end_timestamp: datetime
     data: list[ScrapeResultModel]
-
-    # class Config:
-    #     json_encoders = {datetime: lambda o: o.isoformat()}
-    #

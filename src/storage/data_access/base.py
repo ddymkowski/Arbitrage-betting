@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 
+from src.scrapers.schemas.base import ParsedDatasetModel
+
 
 class BaseRepository(ABC):
     @abstractmethod
-    def add_bulk(self):
+    def insert_bulk(self, data: ParsedDatasetModel) -> None:
         pass
 
     @abstractmethod
@@ -11,5 +13,5 @@ class BaseRepository(ABC):
         pass
 
     @abstractmethod
-    def delete_bulk(self):
+    def delete_bulk(self) -> None:
         pass
