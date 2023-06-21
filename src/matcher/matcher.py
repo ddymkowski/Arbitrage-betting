@@ -69,6 +69,8 @@ class MatchMatcher:
                     return match, _match
         return None
 
+        return 0
+
     def match_entities(self):
         matching_strategy = NaiveMatchingStrategy()
 
@@ -76,7 +78,6 @@ class MatchMatcher:
 
         main, others = packed_data[0], packed_data[1:]  # naive take the shortest list and map others to it
 
-        results = []
         for entry in main.data:
             compare_entity = EntityMatcherModel(bookmaker=main.source, match_data=entry)
             if result := self._find_match(compare_entity, others, matching_strategy):
@@ -92,7 +93,6 @@ class MatchMatcher:
             main_count,
             round(matched_count / main_count * 100, 2),
         )
-
 
 if __name__ == "__main__":
     matcher = MatchMatcher()
