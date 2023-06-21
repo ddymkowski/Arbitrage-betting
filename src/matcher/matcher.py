@@ -68,8 +68,11 @@ class MatchMatcher:
                 if matching_strategy.match_entities(match, _match):
                     return match, _match
         return None
+<<<<<<< HEAD
 
         return 0
+=======
+>>>>>>> 193f61f (naive matching strategy)
 
     def match_entities(self):
         matching_strategy = NaiveMatchingStrategy()
@@ -78,10 +81,25 @@ class MatchMatcher:
 
         main, others = packed_data[0], packed_data[1:]  # naive take the shortest list and map others to it
 
+        results = []
         for entry in main.data:
             compare_entity = EntityMatcherModel(bookmaker=main.source, match_data=entry)
             if result := self._find_match(compare_entity, others, matching_strategy):
                 results.append(result)
+<<<<<<< HEAD
+=======
+
+        # TODO fix this retarded scrape data model, split entries. [just json instead of list[json]]
+        matched_count = len(results)
+        main_count = len(main.data)
+        self._logger.info(
+            "%s matched %s out of %s entries (%s%%)",
+            matching_strategy.__class__.__name__,
+            matched_count,
+            main_count,
+            round(matched_count / main_count * 100, 2),
+        )
+>>>>>>> 193f61f (naive matching strategy)
 
         # TODO fix this retarded scrape data model, split entries. [just json instead of list[json]]
         matched_count = len(results)
