@@ -7,7 +7,7 @@ class MongoDbRepository(BaseRepository):
     def insert_bulk(self, data: ParsedDatasetModel):
         pass
 
-    def get_bulk_by_insertion_timestamp(self):
+    def get_most_recent_bulks(self):
         pass
 
     def delete_bulk(self):
