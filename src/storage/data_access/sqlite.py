@@ -4,6 +4,7 @@ from src.database import get_database
 from src.scrapers.schemas.base import ParsedDatasetModel
 from src.storage.data_access.base import BaseRepository
 from src.storage.models import Scrape
+from sqlalchemy.sql.expression import func
 
 
 class SqliteRepository(BaseRepository):
