@@ -32,5 +32,5 @@ class CustomEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
-def custom_json_serializer(d: dict[Any, Any]) -> dict[Any, Any]:
-    return json.dumps(d, cls=CustomEncoder)
+def custom_json_serializer(dikt: dict[Any, Any]) -> dict[Any, Any]:
+    return json.dumps(dikt, cls=CustomEncoder)

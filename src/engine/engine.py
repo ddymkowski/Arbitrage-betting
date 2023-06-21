@@ -27,9 +27,7 @@ class ArbitrageMasker:
         multiplier_value: int,
         round_up: bool = True,
     ) -> float:
-        rounded_value = float(
-            ceil(value_to_round / multiplier_value) * multiplier_value
-        )
+        rounded_value = float(ceil(value_to_round / multiplier_value) * multiplier_value)
 
         if not round_up:
             return rounded_value - multiplier_value
@@ -65,8 +63,8 @@ class StakeCalculator:
                 )
 
         self._logger.info(
-            "Options to place for the potential arbitrage opportunity are:"
-            f" {pformat(results)}\n"
+            "Options to place for the potential arbitrage opportunity are: %s\n",
+            pformat(results),
         )
         return results
 
@@ -76,7 +74,7 @@ class BetRequestHandler:
         self._logger = logging.getLogger(self.__class__.__name__)
 
     def send_place_bet_request(self, *args, **kwargs):
-        self._logger.info(f"Sending request to bet - bet details: {args} {kwargs}\n")
+        self._logger.info("Sending request to bet - bet details: %s %s\n", args, kwargs)
 
 
 class ArbitrageEngine:
@@ -95,21 +93,21 @@ class ArbitrageEngine:
         arbitrage_opportunity = self._calculate_raw_opportunity(event)
 
         if not arbitrage_opportunity.exists:
-            return None
+            return
 
         self._handle_existing_opportunity(arbitrage_opportunity, expected_winning)
 
         if not arbitrage_opportunity.profit:
             self._logger.info(
-                "No profit after masking for"
-                f" {pformat(arbitrage_opportunity.best_bet_option)}\n"
+                "No profit after masking for %s\n",
+                {pformat(arbitrage_opportunity.best_bet_option)},
             )
-            return None
+            return
 
         self._logger.info(
-            "Expected profit with"
-            f" {pformat(arbitrage_opportunity.best_bet_option)} is"
-            f" {arbitrage_opportunity.profit}\n"
+            "Expected profit with %s is %s\n",
+            {pformat(arbitrage_opportunity.best_bet_option)},
+            {arbitrage_opportunity.profit},
         )
         self._bet_request_handler.send_place_bet_request()
 
@@ -124,7 +122,7 @@ class ArbitrageEngine:
         )
 
         bets_to_place_masked = self._masker.apply_arbitrage_masking(bets_to_place)
-        self._logger.info(f"Betting options masked:\n{pformat(bets_to_place_masked)}\n")
+        self._logger.info("Betting options masked: %s\n", {pformat(bets_to_place_masked)})
 
         total_bet_value_masked = bets_to_place_masked.get_total_bets_amount()
         print(bets_to_place_masked.get_win_per_bet())
@@ -152,9 +150,7 @@ class ArbitrageEngine:
         )
 
     @staticmethod
-    def _calculate_odds_probabilities(
-        best_betting_options: dict[FootballOutcome, dict[Bookmaker, Odds]]
-    ) -> float:
+    def _calculate_odds_probabilities(best_betting_options: dict[FootballOutcome, dict[Bookmaker, Odds]]) -> float:
         probability = 0.0
         for bookmaker in best_betting_options.values():
             for odds in bookmaker.values():

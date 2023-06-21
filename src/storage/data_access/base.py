@@ -9,7 +9,7 @@ class BaseRepository(ABC):
         pass
 
     @abstractmethod
-    def get_bulk_by_insertion_timestamp(self):
+    def get_most_recent_bulks(self):
         pass
 
     @abstractmethod

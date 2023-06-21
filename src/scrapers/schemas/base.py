@@ -20,3 +20,6 @@ class ParsedDatasetModel(BaseModel):
     scrape_start_timestamp: datetime
     scrape_end_timestamp: datetime
     data: list[ScrapeResultModel]
+
+    class Config:
+        orm_mode = True

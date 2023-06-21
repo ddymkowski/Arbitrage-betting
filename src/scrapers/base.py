@@ -30,9 +30,7 @@ class BaseScrapper(ABC, Generic[T]):
         self.scrape_id = uuid4()
         self.scrapping_start_timestamp = datetime.utcnow()
 
-        self._logger.info(
-            f"Starting {self.__class__.__qualname__} job with id: {self.scrape_id}"
-        )
+        self._logger.info("Starting %s job with id: %s", {self.__class__.__qualname__}, {self.scrape_id})
 
     @abstractmethod
     async def acquire_data(self) -> T:
@@ -43,9 +41,7 @@ class BaseScrapper(ABC, Generic[T]):
         pass
 
     def transform_data(self, raw_data: T) -> ParsedDatasetModel:
-        standardized_api_data: list[ScrapeResultModel] = self._standardize_api_data(
-            raw_data
-        )
+        standardized_api_data: list[ScrapeResultModel] = self._standardize_api_data(raw_data)
 
         data_dump = ParsedDatasetModel(
             data=standardized_api_data,
@@ -57,14 +53,10 @@ class BaseScrapper(ABC, Generic[T]):
         return data_dump
 
     def save_data(self, transformed_data: ParsedDatasetModel) -> None:
-        self._logger.info(
-            f"ID: {transformed_data.scrape_id} Saving: {len(transformed_data.data)} data points."
-        )
+        self._logger.info("ID: %s Saving: %s data points.", {transformed_data.scrape_id}, {len(transformed_data.data)})
         self._database.insert_bulk(transformed_data)
 
-    def _standardize_api_data(
-        self, raw_data: list[dict[Any, Any]]
-    ) -> list[ScrapeResultModel]:
+    def _standardize_api_data(self, raw_data: list[dict[Any, Any]]) -> list[ScrapeResultModel]:
         standardized_data = []
         exceptions = []
 
@@ -79,14 +71,12 @@ class BaseScrapper(ABC, Generic[T]):
                 exceptions.append(traceback.format_exc())
 
         exceptions_count = len(exceptions)
-        self._logger.warning(f"Validation errors count: {exceptions_count}.\n")
-        self._logger.info(f"Successfully parsed: {len(standardized_data)} matches.\n")
+        self._logger.warning("Validation errors count: %s\n", {exceptions_count})
+        self._logger.info("Successfully parsed: %s matches.\n", {len(standardized_data)})
 
         if exceptions_count > (0.5 * len(raw_data)):
-            self._logger.error(
-                "More than 50% of raw data could not be parsed properly check logs."
-            )
-            self._logger.error(f"{'---' * 20} \n {pformat(exceptions)} {'---' * 20} \n")
+            self._logger.error("More than 50% of raw data could not be parsed properly check logs.")
+            self._logger.error({pformat(exceptions)})
 
         return standardized_data
 

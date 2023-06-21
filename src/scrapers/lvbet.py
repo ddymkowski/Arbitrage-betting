@@ -13,7 +13,7 @@ from src.scrapers.schemas.base import ParsedDatasetModel, ScrapeResultModel
 
 
 class LvBetScrapper(BaseScrapper):
-    BASE_API_URL = "https://offer.lvbet.pl/client-api/v3/matches/competition-view/?lang=en&sports_groups_ids=1&sports_groups_ids=36530&sports_groups_ids=37609"
+    BASE_API_URL = "https://offer.lvbet.pl/client-api/v3/matches/competition-view/?lang=en&sports_groups_ids=1&sports_groups_ids=36530&sports_groups_ids=37609"  # noqa #pylint: disable=line-too-long
     BOOKMAKER_NAME = Bookmaker.LVBET
 
     @staticmethod
@@ -29,22 +29,15 @@ class LvBetScrapper(BaseScrapper):
 
     async def acquire_data(self) -> T:
         date_parameters = self._get_request_timeframe()
-        response = requests.get(
-            self.BASE_API_URL + date_parameters
-        )  # TODO use async client for consistency
+        response = requests.get(self.BASE_API_URL + date_parameters)  # TODO use async client for consistency
         data = response.json()
         return data
 
     def transform_data(self, raw_data: T) -> ParsedDatasetModel:
-        data_points = [
-            entry
-            for entry in raw_data["primary_column_markets"]
-            if entry["name"] == "Match Result"
-        ]
+        data_points = [entry for entry in raw_data["primary_column_markets"] if entry["name"] == "Match Result"]
 
         matches_event_datetimes = [
-            {"match_id": match["match_id"], "event_time": match["date"]}
-            for match in raw_data["matches"]
+            {"match_id": match["match_id"], "event_time": match["date"]} for match in raw_data["matches"]
         ]
 
         bet_info_with_event_time = defaultdict(dict)
@@ -56,9 +49,7 @@ class LvBetScrapper(BaseScrapper):
         return super().transform_data(complete_data)
 
     def _parse_raw_datapoint(self, raw_match: dict[Any, Any]) -> ScrapeResultModel:
-        odds_with_last_update = partial(
-            Odds, last_update=self.scrapping_start_timestamp
-        )
+        odds_with_last_update = partial(Odds, last_update=self.scrapping_start_timestamp)
 
         return ScrapeResultModel(
             event_time=raw_match["event_time"],

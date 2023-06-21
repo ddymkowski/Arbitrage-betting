@@ -12,13 +12,14 @@ class Base:
     insertion_timestamp = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    @classmethod
     @declared_attr
     def __tablename__(cls):
         return f"{cls.__name__.lower()}s"
 
 
-db_path = "../data.db"
-engine = create_engine(f"sqlite:///{db_path}", json_serializer=custom_json_serializer)
+DB_PATH = "../data.db"
+engine = create_engine(f"sqlite:///{DB_PATH}", json_serializer=custom_json_serializer)
 
 SessionFactory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
