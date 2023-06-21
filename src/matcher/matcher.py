@@ -3,7 +3,6 @@ import logging
 from src.scrapers.schemas.base import ParsedDatasetModel, ScrapeResultModel
 from src.storage.data_access.base import BaseRepository
 from src.storage.data_access.sqlite import SqliteRepository
-from pprint import pprint
 
 logging.basicConfig(
     format="%(asctime)s | %(name)s | %(funcName)s | %(levelname)s: %(message)s",
@@ -19,29 +18,25 @@ class MatchMatcher:
         self._database = database
 
     def _validate_batches_timestamps(self, timestamps: list[dict[str, str]]) -> list[str]:
-        sorted_datetimes = sorted(
-            timestamps, key=lambda entry: entry["scrape_end_time"]
-        )
+        sorted_datetimes = sorted(timestamps, key=lambda entry: entry["scrape_end_time"])
         time_deltas = [
             (
-                sorted_datetimes[i + 1]["scrape_end_time"]
-                - sorted_datetimes[i]["scrape_end_time"],
+                sorted_datetimes[i + 1]["scrape_end_time"] - sorted_datetimes[i]["scrape_end_time"],
                 sorted_datetimes[i]["scrape_id"],
                 sorted_datetimes[i + 1]["scrape_id"],
             )
             for i in range(len(sorted_datetimes) - 1)
         ]
 
-        biggest_delta, id1, id2 = max(
-            time_deltas, key=lambda timedelta_id: timedelta_id[0]
-        )
+        biggest_delta, id1, id2 = max(time_deltas, key=lambda timedelta_id: timedelta_id[0])
 
-        self._logger.info(f"Biggest time delta:  {biggest_delta}")
-        self._logger.info(f"IDs with the biggest gap: {id1}, {id2}")
+        self._logger.info("Biggest time delta: %s", {biggest_delta})
+        self._logger.info("IDs with the biggest gap: %s %s", {id1}, {id2})
 
         if biggest_delta.total_seconds() > ALLOWED_SCRAPE_TIMEDELTA_SECONDS:
             self._logger.warning(
-                f"Delta between scrapes is bigger than {ALLOWED_SCRAPE_TIMEDELTA_SECONDS} seconds, skipping."
+                "Delta between scrapes is bigger than %s seconds, skipping.",
+                {ALLOWED_SCRAPE_TIMEDELTA_SECONDS},
             )
             return []
         return [entry["scrape_id"] for entry in timestamps]
@@ -57,26 +52,24 @@ class MatchMatcher:
         ]
         ids_to_use = self._validate_batches_timestamps(scrape_id_timestamp)
 
-        return sorted(
-            filter(lambda d: d.scrape_id in ids_to_use, data), key=lambda x: len(x.data)
-        )
+        return sorted(filter(lambda d: d.scrape_id in ids_to_use, data), key=lambda x: len(x.data))
 
     def _find_match(self, match: ScrapeResultModel, matches: list[ParsedDatasetModel]):
         print(match)
 
         print(matches)
 
+        return 0
+
     def match_entities(self):
         packed_data = self.filter_and_sort_newest_batches()
 
         main, others = packed_data[0], packed_data[1:]
 
-        results = []
         for entry in main.data:
             result = self._find_match(entry, others)
             print(result)
             break
-
 
 
 if __name__ == "__main__":

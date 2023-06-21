@@ -4,7 +4,7 @@ repos:
     hooks:
     -   id: pylint
         args:
-        -   --disable=import-error,import-outside-toplevel, missing-module-docstring, missing-class-docstring, too-few-public-methods, missing-function-docstring
+        -   --disable=import-error,import-outside-toplevel, missing-module-docstring, missing-class-docstring, too-few-public-methods, missing-function-docstring, fixme
         -   --ignore-paths=^app/migrations/.*|tests/app/.*$
         -   --max-line-length=120
         -   --good-names=a,b,i,j,k,l,r,x,y,z,u,v,w,p,q,n,ch,fp,wb,ws

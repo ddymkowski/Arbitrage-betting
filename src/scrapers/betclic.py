@@ -20,9 +20,7 @@ class BetClicScrapper(BaseScrapper):
     )
     BOOKMAKER_NAME = Bookmaker.BETCLIC
 
-    async def acquire_data(
-        self, limit: int = BETCLIC_API_LIMIT, pages: int = BETCLIC_PAGES
-    ):
+    async def acquire_data(self, limit: int = BETCLIC_API_LIMIT, pages: int = BETCLIC_PAGES):
         tasks = []
         offsets = [page * limit for page in range(pages)]
 
@@ -31,9 +29,7 @@ class BetClicScrapper(BaseScrapper):
         async with ClientSession() as session:
             for offset in offsets:
                 request_url = self.BASE_API_URL + f"&offset={offset}&limit={limit}"
-                task = asyncio.create_task(
-                    self.fetch_page(matches, session, request_url, self.scrape_id)
-                )
+                task = asyncio.create_task(self.fetch_page(matches, session, request_url, self.scrape_id))
                 tasks.append(task)
 
             await asyncio.gather(*tasks)
@@ -45,24 +41,16 @@ class BetClicScrapper(BaseScrapper):
     ) -> ScrapeResultModel:
         odds_section = raw_match["grouped_markets"][0]["markets"][0]["selections"]
 
-        odds_with_last_update = partial(
-            Odds, last_update=self.scrapping_start_timestamp
-        )
+        odds_with_last_update = partial(Odds, last_update=self.scrapping_start_timestamp)
 
         return ScrapeResultModel(
             event_time=raw_match["date"],
             team_a=raw_match["contestants"][0]["name"],
             team_b=raw_match["contestants"][1]["name"],
             bet_options={
-                FootballOutcome.TEAM_A_WINS: odds_with_last_update(
-                    odds=odds_section[0][0]["odds"]
-                ),
-                FootballOutcome.DRAW: odds_with_last_update(
-                    odds=odds_section[1][0]["odds"]
-                ),
-                FootballOutcome.TEAM_B_WINS: odds_with_last_update(
-                    odds=odds_section[2][0]["odds"]
-                ),
+                FootballOutcome.TEAM_A_WINS: odds_with_last_update(odds=odds_section[0][0]["odds"]),
+                FootballOutcome.DRAW: odds_with_last_update(odds=odds_section[1][0]["odds"]),
+                FootballOutcome.TEAM_B_WINS: odds_with_last_update(odds=odds_section[2][0]["odds"]),
             },
         )
 
@@ -80,9 +68,7 @@ class BetClicScrapper(BaseScrapper):
                 matches.extend(json_response["matches"])
                 return
 
-            self._logger.warning(
-                f"ID: {scrape_id} - {url}:{response.status} - {json_response}\n"
-            )
+            self._logger.warning(f"ID: {scrape_id} - {url}:{response.status} - {json_response}\n")
 
 
 async def main() -> None:
