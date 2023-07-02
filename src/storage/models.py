@@ -9,7 +9,10 @@ class Scrape(Base):
     source = Column(String)
     scrape_start_timestamp = Column(DateTime)
     scrape_end_timestamp = Column(DateTime)
-    data = Column(JSON)
+    team_a = Column(String)
+    team_b = Column(String)
+    event_time = Column(DateTime)
+    bet_options = Column(JSON)
 
 
 if REBUILD_TABLES:

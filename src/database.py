@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, String, create_engine
 from sqlalchemy.orm import as_declarative, declared_attr, sessionmaker
 
+from src.constants import DB_PATH
 from src.scrapers.utils.utils import custom_json_serializer, generate_uuid
 
 
@@ -18,7 +19,6 @@ class Base:
         return f"{cls.__name__.lower()}s"
 
 
-DB_PATH = "../data.db"
 engine = create_engine(f"sqlite:///{DB_PATH}", json_serializer=custom_json_serializer)
 
 SessionFactory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
