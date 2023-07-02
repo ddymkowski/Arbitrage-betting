@@ -9,7 +9,7 @@ from uuid import uuid4
 from pydantic import ValidationError
 
 from src.enums import Bookmaker
-from src.scrapers.schemas.base import ParsedDatasetModel, ScrapeResultModel
+from src.scrapers.schemas.base import ScrapeResultModel, ScrapeResultModelEnriched
 from src.storage.data_access.base import BaseRepository
 from src.storage.data_access.sqlite import SqliteRepository
 
@@ -30,7 +30,11 @@ class BaseScrapper(ABC, Generic[T]):
         self.scrape_id = uuid4()
         self.scrapping_start_timestamp = datetime.utcnow()
 
-        self._logger.info("Starting %s job with id: %s", {self.__class__.__qualname__}, {self.scrape_id})
+        self._logger.info(
+            "Starting %s job with id: %s",
+            {self.__class__.__qualname__},
+            {self.scrape_id},
+        )
 
     @abstractmethod
     async def acquire_data(self) -> T:
@@ -40,20 +44,25 @@ class BaseScrapper(ABC, Generic[T]):
     def _parse_raw_datapoint(self, raw_match: dict[Any, Any]) -> ScrapeResultModel:
         pass
 
-    def transform_data(self, raw_data: T) -> ParsedDatasetModel:
+    def transform_data(self, raw_data: T) -> list[ScrapeResultModelEnriched]:
         standardized_api_data: list[ScrapeResultModel] = self._standardize_api_data(raw_data)
 
-        data_dump = ParsedDatasetModel(
-            data=standardized_api_data,
-            scrape_id=self.scrape_id,
-            source=self.BOOKMAKER_NAME,
-            scrape_start_timestamp=self.scrapping_start_timestamp,
-            scrape_end_timestamp=datetime.utcnow(),
-        )
-        return data_dump
+        enriched_db_ready_data = [
+            ScrapeResultModelEnriched(
+                event_time=scrape_result.event_time,
+                team_a=scrape_result.team_a,
+                team_b=scrape_result.team_b,
+                bet_options=scrape_result.bet_options,
+                scrape_id=self.scrape_id,
+                source=self.BOOKMAKER_NAME,
+                scrape_start_timestamp=self.scrapping_start_timestamp,
+                scrape_end_timestamp=datetime.utcnow(),
+            )
+            for scrape_result in standardized_api_data
+        ]
+        return enriched_db_ready_data
 
-    def save_data(self, transformed_data: ParsedDatasetModel) -> None:
-        self._logger.info("ID: %s Saving: %s data points.", {transformed_data.scrape_id}, {len(transformed_data.data)})
+    def save_data(self, transformed_data: list[ScrapeResultModelEnriched]) -> None:
         self._database.insert_bulk(transformed_data)
 
     def _standardize_api_data(self, raw_data: list[dict[Any, Any]]) -> list[ScrapeResultModel]:

@@ -9,7 +9,7 @@ from src.constants import LV_BET_DAYS_TO_SCRAPE
 from src.engine.models import Odds
 from src.enums import Bookmaker, FootballOutcome
 from src.scrapers.base import BaseScrapper, T
-from src.scrapers.schemas.base import ParsedDatasetModel, ScrapeResultModel
+from src.scrapers.schemas.base import ScrapeResultModel, ScrapeResultModelEnriched
 
 
 class LvBetScrapper(BaseScrapper):
@@ -33,7 +33,7 @@ class LvBetScrapper(BaseScrapper):
         data = response.json()
         return data
 
-    def transform_data(self, raw_data: T) -> ParsedDatasetModel:
+    def transform_data(self, raw_data: T) -> list[ScrapeResultModelEnriched]:
         data_points = [entry for entry in raw_data["primary_column_markets"] if entry["name"] == "Match Result"]
 
         matches_event_datetimes = [

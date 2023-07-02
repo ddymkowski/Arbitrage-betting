@@ -14,12 +14,22 @@ class ScrapeResultModel(BaseModel):
     bet_options: dict[FootballOutcome, Odds]
 
 
-class ParsedDatasetModel(BaseModel):
+class ScrapeResultModelEnriched(ScrapeResultModel):
     scrape_id: UUID
     source: Bookmaker
     scrape_start_timestamp: datetime
     scrape_end_timestamp: datetime
-    data: list[ScrapeResultModel]
 
     class Config:
         orm_mode = True
+
+
+# class ParsedDatasetModel(BaseModel):
+#     scrape_id: UUID
+#     source: Bookmaker
+#     scrape_start_timestamp: datetime
+#     scrape_end_timestamp: datetime
+#     data: list[ScrapeResultModel]
+#
+#     class Config:
+#         orm_mode = True

@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
-from src.scrapers.schemas.base import ParsedDatasetModel
+from src.scrapers.schemas.base import ScrapeResultModelEnriched
 
 
 class BaseRepository(ABC):
     @abstractmethod
-    def insert_bulk(self, data: ParsedDatasetModel) -> None:
+    def insert_bulk(self, data: list[ScrapeResultModelEnriched]) -> None:
         pass
 
     @abstractmethod
