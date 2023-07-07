@@ -1,7 +1,8 @@
-from src.matcher.strategy.base import BaseEntityMatchingStrategy, EntityMatcherModel
+from src.matcher.schemas import EntityMatcherModel
+from src.matcher.strategy.entity.base import BaseEntityMatchingStrategy
 
 
-class NaiveMatchingStrategy(BaseEntityMatchingStrategy):
+class NaiveEntityMatchingStrategy(BaseEntityMatchingStrategy):
     def match_entities(self, first_entity: EntityMatcherModel, second_entity: EntityMatcherModel) -> bool:
         if first_entity.match_data.event_time != second_entity.match_data.event_time:
             return False
