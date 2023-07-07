@@ -1,9 +1,15 @@
 import logging
 
 from src.enums import Bookmaker
-from src.matcher.strategy.base import EntityMatcherModel
-from src.matcher.strategy.naive import BaseEntityMatchingStrategy, NaiveMatchingStrategy
-from src.scrapers.schemas.base import ScrapeResultModel, ScrapeResultModelEnriched
+from src.matcher.strategy.event import (
+    BaseEventMatchingStrategy,
+    NaiveEventMatchingStrategy,
+)
+from src.matcher.strategy.entity import (
+    BaseEntityMatchingStrategy,
+    NaiveEntityMatchingStrategy,
+)
+from src.scrapers.schemas.base import ScrapeResultModelEnriched
 from src.storage.data_access.base import BaseRepository
 from src.storage.data_access.sqlite import SqliteRepository
 
@@ -19,9 +25,11 @@ class MatchMatcher:
     def __init__(
         self,
         database: BaseRepository = SqliteRepository(),
-        strategy: BaseEntityMatchingStrategy = NaiveMatchingStrategy(),
+        entity_matching_strategy: BaseEntityMatchingStrategy = NaiveEntityMatchingStrategy(),
+        event_matching_strategy: BaseEventMatchingStrategy = NaiveEventMatchingStrategy(),
     ) -> None:
-        self._strategy = strategy
+        self._entity_matching_strategy = entity_matching_strategy
+        self._event_matching_strategy = event_matching_strategy
         self._logger = logging.getLogger(self.__class__.__qualname__)
         self._database = database
 
@@ -47,15 +55,28 @@ class MatchMatcher:
                 {ALLOWED_SCRAPE_TIMEDELTA_SECONDS},
             )
             # TODO add some handling
+            print("marking event as cancelled")
 
-    def get_newest_batches(self) -> dict[Bookmaker, list[ScrapeResultModelEnriched]]:
-        data = self._database.get_most_recent_bulks()
+    @staticmethod
+    def _split_and_sort_data_by_bookmaker(
+        database_data: list[ScrapeResultModelEnriched],
+    ) -> dict[Bookmaker, list[ScrapeResultModelEnriched]]:
         bookmaker_data: dict[Bookmaker, list[ScrapeResultModelEnriched]] = {bookmaker: [] for bookmaker in Bookmaker}
 
-        for datapoint in sorted(data, key=lambda x: x.scrape_end_timestamp):
+        for datapoint in sorted(database_data, key=lambda x: x.scrape_end_timestamp):
             bookmaker_data[datapoint.source].append(datapoint)
 
         return {key: value for key, value in bookmaker_data.items() if value}
+
+    def _get_newest_batches(self) -> dict[Bookmaker, list[ScrapeResultModelEnriched]]:
+        database_data: list[ScrapeResultModelEnriched] = self._database.get_most_recent_bulks()
+        preprocessed_data = self._split_and_sort_data_by_bookmaker(database_data)
+        self._logger.info(
+            "Received bookmakers: %s, their datasets lengths: %s",
+            preprocessed_data.keys(),
+            [len(data) for data in preprocessed_data.values()],
+        )
+        return preprocessed_data
 
     def _validate_timestamps_for_batches(self, bookmaker_data):
         bookmaker_scrape_end = {bookmaker: None for bookmaker in Bookmaker}
@@ -72,37 +93,21 @@ class MatchMatcher:
             [timestamp_id for timestamp_id in bookmaker_scrape_end.values() if timestamp_id is not None]
         )
 
-    @staticmethod
-    def _find_match(
-        match: ScrapeResultModelEnriched,
-        potential_matches: list[ScrapeResultModelEnriched],
-        matching_strategy: BaseEntityMatchingStrategy,
-    ) -> tuple[ScrapeResultModel]:
-        match = EntityMatcherModel(bookmaker=match.source, match_data=match)
-        for _match in potential_matches:
-            _match = EntityMatcherModel(bookmaker=_match.source, match_data=_match)
-            if matching_strategy.match_entities(match, _match):
-                return match, _match
-        return None
-
     def match_entities(self):
-        data: dict[Bookmaker, list[ScrapeResultModelEnriched]] = self.get_newest_batches()
-        self._validate_timestamps_for_batches(data)
-
-        smallest_bookmaker_dataset_key: str = min(data, key=lambda k: len(data[k]))
-        bookmaker_data = data.pop(smallest_bookmaker_dataset_key)
+        data: dict[Bookmaker, list[ScrapeResultModelEnriched]] = self._get_newest_batches()
+        self._validate_timestamps_for_batches(data)  # TODO I dont like this function
 
         results = []
-        for match_data in bookmaker_data:
-            for list_of_matches in data.values():
-                if (matched_data := self._find_match(match_data, list_of_matches, self._strategy)) is not None:
-                    results.append(matched_data)
+        for match, _match in self._event_matching_strategy.match_events(data):
+            if self._entity_matching_strategy.match_entities(match, _match):
+                results.append((match, _match))
 
         matched_count = len(results)
         main_count = sum(len(lst) for lst in data.values())
         self._logger.info(
-            "%s matched %s out of %s entries (%s%%)",
-            self._strategy.__class__.__name__,
+            "%s & %s matched %s out of %s entries (%s%%)",
+            self._event_matching_strategy.__class__.__qualname__,
+            self._entity_matching_strategy.__class__.__qualname__,
             matched_count,
             main_count,
             round(matched_count / main_count * 100, 2),
