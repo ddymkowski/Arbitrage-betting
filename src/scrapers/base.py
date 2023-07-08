@@ -23,7 +23,13 @@ Serializable = dict[str, Any]
 
 
 class BaseScrapper(ABC, Generic[RD]):
-    BOOKMAKER_NAME: Bookmaker = NotImplemented
+    BOOKMAKER: Bookmaker
+
+    @classmethod
+    def __init_subclass__(cls, *args, **kwargs):
+        var = "BOOKMAKER"
+        if not hasattr(cls, var):
+            raise NotImplementedError(f"Class {cls} lacks required `{var}` class attribute of type src.enums.Bookmaker")
 
     def __init__(self, database: BaseRepository = SqliteRepository()):
         self._logger = logging.getLogger(self.__class__.__qualname__)
@@ -60,7 +66,7 @@ class BaseScrapper(ABC, Generic[RD]):
                 team_b=scrape_result.team_b,
                 bet_options=scrape_result.bet_options,
                 scrape_id=self.scrape_id,
-                source=self.BOOKMAKER_NAME,
+                source=self.BOOKMAKER_NAME,  # pylint: disable=no-member
                 scrape_start_timestamp=self.scrapping_start_timestamp,
                 scrape_end_timestamp=scrape_end_timestamp,
             )
@@ -98,8 +104,8 @@ class BaseScrapper(ABC, Generic[RD]):
     async def scrape(self) -> None:
         raw_data: RD = await self.acquire_raw_data()
         serializable_data: list[Serializable] = self.preprocess_raw_data(raw_data)
-        serialized_data: list[ScrapeResultModel] = self._serialize_data(serializable_data)
+        db_serialized_data: list[ScrapeResultModel] = self._serialize_data(serializable_data)
         enriched_db_serialized_data: list[ScrapeResultModelEnriched] = self._enrich_data_with_scrape_metadata(
-            serialized_data
+            db_serialized_data
         )
         self.save_data(enriched_db_serialized_data)
