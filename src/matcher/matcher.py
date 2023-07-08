@@ -59,7 +59,9 @@ class MatchMatcher:
             print("marking event as cancelled")
 
     @staticmethod
-    def _split_and_sort_data_by_bookmaker(database_data: list[ScrapeResultModelEnriched]) -> BookmakersDatasets:
+    def _split_and_sort_data_by_bookmaker(
+        database_data: list[ScrapeResultModelEnriched],
+    ) -> BookmakersDatasets:
         bookmaker_data: BookmakersDatasets = {bookmaker: [] for bookmaker in Bookmaker}
 
         for datapoint in sorted(database_data, key=lambda x: x.scrape_end_timestamp):

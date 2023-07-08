@@ -28,8 +28,11 @@ class BaseScrapper(ABC, Generic[RD]):
     @classmethod
     def __init_subclass__(cls, *args, **kwargs):
         var = "BOOKMAKER"
+
         if not hasattr(cls, var):
-            raise NotImplementedError(f"Class {cls} lacks required `{var}` class attribute of type src.enums.Bookmaker")
+            raise NotImplementedError(
+                f"Class {cls} lacks required: {var} class attribute of type {Bookmaker.__module__}.{Bookmaker.__name__}"
+            )
 
     def __init__(self, database: BaseRepository = SqliteRepository()):
         self._logger = logging.getLogger(self.__class__.__qualname__)
