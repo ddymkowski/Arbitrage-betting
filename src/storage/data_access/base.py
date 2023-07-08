@@ -9,7 +9,7 @@ class BaseRepository(ABC):
         pass
 
     @abstractmethod
-    def get_most_recent_bulks(self):
+    def get_most_recent_bulks(self) -> list[ScrapeResultModelEnriched]:
         pass
 
     @abstractmethod

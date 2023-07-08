@@ -8,7 +8,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel
 
 
-def generate_uuid():
+def generate_uuid() -> str:
     return str(uuid4())
 
 

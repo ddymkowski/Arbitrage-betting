@@ -8,11 +8,13 @@ from aiohttp import ClientSession
 from src.constants import BETCLIC_API_LIMIT, BETCLIC_PAGES
 from src.engine.models import Odds
 from src.enums import Bookmaker, FootballOutcome
-from src.scrapers.base import BaseScrapper
+from src.scrapers.base import RD, BaseScrapper
 from src.scrapers.schemas.base import ScrapeResultModel
 
+Serializable = dict[str, Any]
 
-class BetClicScrapper(BaseScrapper):
+
+class BetClicScrapper(BaseScrapper[list[Serializable]]):
     # language pl = pa
     BASE_API_URL = (
         "https://offer.cdn.begmedia.com/api/pub/v4/sports/1?application=2048&countrycode=pl"
@@ -20,33 +22,33 @@ class BetClicScrapper(BaseScrapper):
     )
     BOOKMAKER_NAME = Bookmaker.BETCLIC
 
-    async def acquire_data(self, limit: int = BETCLIC_API_LIMIT, pages: int = BETCLIC_PAGES):
+    async def acquire_raw_data(self, limit: int = BETCLIC_API_LIMIT, pages: int = BETCLIC_PAGES) -> list[Serializable]:
         tasks = []
         offsets = [page * limit for page in range(pages)]
 
-        matches = []
+        matches: list[Any] = []
 
         async with ClientSession() as session:
             for offset in offsets:
                 request_url = self.BASE_API_URL + f"&offset={offset}&limit={limit}"
-                task = asyncio.create_task(self.fetch_page(matches, session, request_url, self.scrape_id))
+                task = asyncio.create_task(self._fetch_page(matches, session, request_url, self.scrape_id))
                 tasks.append(task)
 
             await asyncio.gather(*tasks)
         return matches
 
-    def _parse_raw_datapoint(
-        self,
-        raw_match: dict[Any, Any],
-    ) -> ScrapeResultModel:
-        odds_section = raw_match["grouped_markets"][0]["markets"][0]["selections"]
+    def preprocess_raw_data(self, raw_data: list[Serializable]) -> list[Serializable]:
+        return raw_data
+
+    def serialize_datapoint(self, raw_datapoint: Serializable) -> ScrapeResultModel:
+        odds_section = raw_datapoint["grouped_markets"][0]["markets"][0]["selections"]
 
         odds_with_last_update = partial(Odds, last_update=self.scrapping_start_timestamp)
 
         return ScrapeResultModel(
-            event_time=raw_match["date"],
-            team_a=raw_match["contestants"][0]["name"],
-            team_b=raw_match["contestants"][1]["name"],
+            event_time=raw_datapoint["date"],
+            team_a=raw_datapoint["contestants"][0]["name"],
+            team_b=raw_datapoint["contestants"][1]["name"],
             bet_options={
                 FootballOutcome.TEAM_A_WINS: odds_with_last_update(odds=odds_section[0][0]["odds"]),
                 FootballOutcome.DRAW: odds_with_last_update(odds=odds_section[1][0]["odds"]),
@@ -54,9 +56,9 @@ class BetClicScrapper(BaseScrapper):
             },
         )
 
-    async def fetch_page(
+    async def _fetch_page(
         self,
-        matches: list[dict[str, Any]],
+        matches: RD,
         session: ClientSession,
         url: str,
         scrape_id: UUID,

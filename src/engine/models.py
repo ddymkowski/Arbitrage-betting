@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Optional
 
 from src.enums import Bookmaker, FootballOutcome, PotentialBetState
 
@@ -7,19 +8,7 @@ from src.enums import Bookmaker, FootballOutcome, PotentialBetState
 @dataclass
 class Odds:
     odds: float
-    last_update: datetime = None
-
-    def __lt__(self, other):
-        return self.odds < other.odds
-
-    def __gt__(self, other):
-        return self.odds > other.odds
-
-    def __eq__(self, other):
-        return self.odds == other.odds
-
-    def __ne__(self, other):
-        return self.odds != other.odds
+    last_update: Optional[datetime] = None
 
 
 @dataclass
@@ -48,13 +37,13 @@ class BetsSet:
     bets: tuple[Bet] = field(default_factory=tuple)
 
     def get_total_bets_amount(self):
-        return sum([bet.bet_amount for bet in self.bets])
+        return sum(bet.bet_amount for bet in self.bets)
 
     def get_win_per_bet(self):
         return [bet.bet_amount * bet.odds.odds for bet in self.bets]
 
     def get_probability(self):
-        return sum([1 / bet.odds.odds for bet in self.bets])
+        return sum(1 / bet.odds.odds for bet in self.bets)
 
 
 @dataclass
