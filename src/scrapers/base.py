@@ -18,11 +18,12 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-T = TypeVar("T")
+RD = TypeVar("RD", bound=Any)
+Serializable = dict[str, Any]
 
 
-class BaseScrapper(ABC, Generic[T]):
-    BOOKMAKER_NAME = Bookmaker.NONE
+class BaseScrapper(ABC, Generic[RD]):
+    BOOKMAKER_NAME: Bookmaker = NotImplemented
 
     def __init__(self, database: BaseRepository = SqliteRepository()):
         self._logger = logging.getLogger(self.__class__.__qualname__)
@@ -37,16 +38,21 @@ class BaseScrapper(ABC, Generic[T]):
         )
 
     @abstractmethod
-    async def acquire_data(self) -> T:
+    async def acquire_raw_data(self) -> RD:
         pass
 
     @abstractmethod
-    def _parse_raw_datapoint(self, raw_match: dict[Any, Any]) -> ScrapeResultModel:
+    def preprocess_raw_data(self, raw_data: RD) -> list[Serializable]:
         pass
 
-    def transform_data(self, raw_data: T) -> list[ScrapeResultModelEnriched]:
-        standardized_api_data: list[ScrapeResultModel] = self._standardize_api_data(raw_data)
+    @abstractmethod
+    def serialize_datapoint(self, raw_datapoint: Serializable) -> ScrapeResultModel:
+        pass
 
+    def _enrich_data_with_scrape_metadata(
+        self, serialized_data: list[ScrapeResultModel]
+    ) -> list[ScrapeResultModelEnriched]:
+        scrape_end_timestamp = datetime.utcnow()
         enriched_db_ready_data = [
             ScrapeResultModelEnriched(
                 event_time=scrape_result.event_time,
@@ -56,24 +62,21 @@ class BaseScrapper(ABC, Generic[T]):
                 scrape_id=self.scrape_id,
                 source=self.BOOKMAKER_NAME,
                 scrape_start_timestamp=self.scrapping_start_timestamp,
-                scrape_end_timestamp=datetime.utcnow(),
+                scrape_end_timestamp=scrape_end_timestamp,
             )
-            for scrape_result in standardized_api_data
+            for scrape_result in serialized_data
         ]
         return enriched_db_ready_data
 
-    def save_data(self, transformed_data: list[ScrapeResultModelEnriched]) -> None:
-        self._database.insert_bulk(transformed_data)
-
-    def _standardize_api_data(self, raw_data: list[dict[Any, Any]]) -> list[ScrapeResultModel]:
+    def _serialize_data(self, serializable_data: list[Serializable]) -> list[ScrapeResultModel]:
         standardized_data = []
         exceptions = []
 
-        for raw_match_data in raw_data:
+        for match_data in serializable_data:
             try:
                 standardized_data.append(
-                    self._parse_raw_datapoint(
-                        raw_match=raw_match_data,
+                    self.serialize_datapoint(
+                        raw_datapoint=match_data,
                     )
                 )
             except (ValidationError, IndexError, KeyError):
@@ -83,13 +86,20 @@ class BaseScrapper(ABC, Generic[T]):
         self._logger.warning("Validation errors count: %s\n", {exceptions_count})
         self._logger.info("Successfully parsed: %s matches.\n", {len(standardized_data)})
 
-        if exceptions_count > (0.5 * len(raw_data)):
+        if exceptions_count > (0.5 * len(serializable_data)):
             self._logger.error("More than 50% of raw data could not be parsed properly check logs.")
             self._logger.error({pformat(exceptions)})
 
         return standardized_data
 
-    async def scrape(self):
-        raw_data = await self.acquire_data()
-        transformed_data = self.transform_data(raw_data)
-        self.save_data(transformed_data)
+    def save_data(self, transformed_data: list[ScrapeResultModelEnriched]) -> None:
+        self._database.insert_bulk(transformed_data)
+
+    async def scrape(self) -> None:
+        raw_data: RD = await self.acquire_raw_data()
+        serializable_data: list[Serializable] = self.preprocess_raw_data(raw_data)
+        serialized_data: list[ScrapeResultModel] = self._serialize_data(serializable_data)
+        enriched_db_serialized_data: list[ScrapeResultModelEnriched] = self._enrich_data_with_scrape_metadata(
+            serialized_data
+        )
+        self.save_data(enriched_db_serialized_data)

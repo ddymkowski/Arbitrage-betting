@@ -1,13 +1,14 @@
 import logging
 
 from src.enums import Bookmaker
-from src.matcher.strategy.event import (
-    BaseEventMatchingStrategy,
-    NaiveEventMatchingStrategy,
-)
+from src.matcher.schemas import BookmakersDatasets
 from src.matcher.strategy.entity import (
     BaseEntityMatchingStrategy,
     NaiveEntityMatchingStrategy,
+)
+from src.matcher.strategy.event import (
+    BaseEventMatchingStrategy,
+    NaiveEventMatchingStrategy,
 )
 from src.scrapers.schemas.base import ScrapeResultModelEnriched
 from src.storage.data_access.base import BaseRepository
@@ -58,17 +59,15 @@ class MatchMatcher:
             print("marking event as cancelled")
 
     @staticmethod
-    def _split_and_sort_data_by_bookmaker(
-        database_data: list[ScrapeResultModelEnriched],
-    ) -> dict[Bookmaker, list[ScrapeResultModelEnriched]]:
-        bookmaker_data: dict[Bookmaker, list[ScrapeResultModelEnriched]] = {bookmaker: [] for bookmaker in Bookmaker}
+    def _split_and_sort_data_by_bookmaker(database_data: list[ScrapeResultModelEnriched]) -> BookmakersDatasets:
+        bookmaker_data: BookmakersDatasets = {bookmaker: [] for bookmaker in Bookmaker}
 
         for datapoint in sorted(database_data, key=lambda x: x.scrape_end_timestamp):
             bookmaker_data[datapoint.source].append(datapoint)
 
         return {key: value for key, value in bookmaker_data.items() if value}
 
-    def _get_newest_batches(self) -> dict[Bookmaker, list[ScrapeResultModelEnriched]]:
+    def _get_newest_batches(self) -> BookmakersDatasets:
         database_data: list[ScrapeResultModelEnriched] = self._database.get_most_recent_bulks()
         preprocessed_data = self._split_and_sort_data_by_bookmaker(database_data)
         self._logger.info(
@@ -94,7 +93,7 @@ class MatchMatcher:
         )
 
     def match_entities(self):
-        data: dict[Bookmaker, list[ScrapeResultModelEnriched]] = self._get_newest_batches()
+        data: BookmakersDatasets = self._get_newest_batches()
         self._validate_timestamps_for_batches(data)  # TODO I dont like this function
 
         results = []

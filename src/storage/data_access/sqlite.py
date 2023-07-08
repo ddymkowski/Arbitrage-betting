@@ -7,8 +7,8 @@ from src.storage.models import Scrape
 
 
 class SqliteRepository(BaseRepository):
-    def __init__(self):
-        self.session = get_database()
+    def __init__(self) -> None:
+        self._session = get_database()
 
     def insert_bulk(self, data: list[ScrapeResultModelEnriched]):
         models = [
@@ -25,22 +25,22 @@ class SqliteRepository(BaseRepository):
             for result in data
         ]
 
-        self.session.bulk_save_objects(models)
+        self._session.bulk_save_objects(models)
         try:
-            self.session.commit()
+            self._session.commit()
         except Exception as err:  # noqa
-            self.session.rollback()
+            self._session.rollback()
             raise err
 
-    def get_most_recent_bulks(self):
+    def get_most_recent_bulks(self) -> list[ScrapeResultModelEnriched]:
         subquery = (
-            self.session.query(Scrape.source, func.max(Scrape.insertion_timestamp).label("max_date"))
+            self._session.query(Scrape.source, func.max(Scrape.insertion_timestamp).label("max_date"))
             .group_by(Scrape.source)
             .subquery()
         )
 
         ids_subquery = (
-            self.session.query(Scrape.scrape_id)
+            self._session.query(Scrape.scrape_id)
             .join(
                 subquery,
                 (Scrape.insertion_timestamp == subquery.c.max_date) & (Scrape.source == subquery.c.source),
@@ -48,9 +48,9 @@ class SqliteRepository(BaseRepository):
             .subquery()
         )
 
-        query = self.session.query(Scrape).filter(Scrape.scrape_id.in_(ids_subquery.select()))
+        query = self._session.query(Scrape).filter(Scrape.scrape_id.in_(ids_subquery.select()))
 
         return [ScrapeResultModelEnriched.from_orm(model) for model in query.all()]
 
-    def delete_bulk(self):
+    def delete_bulk(self) -> None:
         pass

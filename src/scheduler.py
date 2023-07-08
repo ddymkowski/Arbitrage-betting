@@ -14,7 +14,7 @@ class ScrapeJobsScheduler:
 
     def start_scheduler(self):
         for job in self._scrapping_jobs:
-            self._scheduler.add_job(job, "interval", seconds=15)
+            self._scheduler.add_job(job, "interval", seconds=3)
 
         self._scheduler.start()
         asyncio.get_event_loop().run_forever()
