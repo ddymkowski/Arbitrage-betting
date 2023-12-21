@@ -3,8 +3,8 @@ from typing import Callable
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from src.scrapers.betclic import main as betclic_scrape_job
-from src.scrapers.lvbet import main as lvbet_scrape_job
+from scrapers.src.services.betclic import main as betclic_scrape_job
+from scrapers.src.services.lvbet import main as lvbet_scrape_job
 
 
 class ScrapeJobsScheduler:

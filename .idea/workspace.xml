@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="81695602-62d7-49c3-8737-4717d412929f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev-requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sqlite.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/engine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/strategy/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/matcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/matcher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/strategy/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/schemas/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/strategy/entity/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/strategy/entity/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/strategy/entity/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/strategy/entity/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/strategy/entity/naive.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/strategy/entity/naive.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/strategy/event/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/strategy/event/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/strategy/event/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/strategy/event/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/matcher/strategy/event/naive.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/strategy/event/naive.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scheduler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/scheduler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scrapers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/storage/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scrapers/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scrapers/betclic.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/betclic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scrapers/lvbet.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/lvbet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scrapers/schemas/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/storage/data_access/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scrapers/schemas/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/schemas/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scrapers/utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/utils/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scrapers/utils/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/utils/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/data_access/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/data_access/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/storage/data_access/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/data_access/mongo.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/storage/data_access/mongo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/data_access/sqlite.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/storage/data_access/sqlite.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/storage/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/storage/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/unit/__init__.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2RYHAkrnZWBWFsRWlNAFCZKeufz" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/damiandymkowski/Desktop/Code/Personal/moneyprinter&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/scrapers" />
+      <recent name="$PROJECT_DIR$/scrapers/src" />
+      <recent name="$PROJECT_DIR$/scrapers/src/services" />
+      <recent name="$PROJECT_DIR$/src/matcher/strategy/entity" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main (1)">
+    <configuration name="rabbitdown" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="rabbitdown" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="rabbitup" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="rabbitup" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="infrastructure" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="moneyprinter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/rabbitmq" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/rabbitmq/infrastructure.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="moneyprinter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scrapers" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scrapers/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="moneyprinter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main (1)" />
+        <item itemvalue="Python.infrastructure" />
+        <item itemvalue="Makefile Target.rabbitup" />
+        <item itemvalue="Makefile Target.rabbitdown" />
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="81695602-62d7-49c3-8737-4717d412929f" name="Changes" comment="" />
+      <created>1687419955144</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1687419955144</updated>
+    </task>
+    <servers />
+  </component>
+</project>

@@ -4,7 +4,7 @@ from sqlalchemy import Column, DateTime, String, create_engine
 from sqlalchemy.orm import as_declarative, declared_attr, sessionmaker
 
 from src.constants import DB_PATH
-from src.scrapers.utils.utils import custom_json_serializer, generate_uuid
+from scrapers.src.utils.utils import custom_json_serializer, generate_uuid
 
 
 @as_declarative()
