@@ -12,7 +12,7 @@ class FootballMatchData(BaseModel):
     team_b: str
     bet_options: dict[FootballOutcome, float]
 
-    @validator('bet_options')
+    @validator("bet_options")
     def validate_positive_floats(cls, v: dict[FootballOutcome, float]) -> dict[FootballOutcome, float]:
         for key, value in v.items():
             if value <= 0:
@@ -25,6 +25,3 @@ class FootballMatchDataDTO(FootballMatchData):
     source: Bookmaker
     scrape_start_timestamp: datetime
     scrape_end_timestamp: datetime
-
-    class Config:
-        orm_mode = True

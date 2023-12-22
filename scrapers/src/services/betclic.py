@@ -5,9 +5,9 @@ from uuid import UUID
 from aiohttp import ClientSession
 
 from src.enums import Bookmaker, FootballOutcome
-from src.services.base import RD, BaseScrapper
 from src.schemas.base import FootballMatchData
-from src.settings import settings
+from src.services.base import RD, BaseScrapingService
+from src.settings.settings import settings
 
 BETCLIC_API_LIMIT: Final[int] = settings.BETCLIC_API_LIMIT
 BETCLIC_PAGES: Final[int] = settings.BETCLIC_PAGES
@@ -15,7 +15,7 @@ BETCLIC_PAGES: Final[int] = settings.BETCLIC_PAGES
 Serializable = dict[str, Any]
 
 
-class BetClicScrapper(BaseScrapper[list[Serializable]]):
+class BetClicScrapingService(BaseScrapingService[list[Serializable]]):
     # language pl = pa
     BASE_API_URL = (
         "https://offer.cdn.begmedia.com/api/pub/v4/sports/1?application=2048&countrycode=pl"
@@ -34,14 +34,10 @@ class BetClicScrapper(BaseScrapper[list[Serializable]]):
 
         async with ClientSession() as session:
             for offset in offsets:
-                params = {"offset": offset,
-                          "limit": limit}
+                params = {"offset": offset, "limit": limit}
                 task = asyncio.create_task(
-                    self._fetch_page(matches,
-                                     params,
-                                     session,
-                                     self.BASE_API_URL,
-                                     self.scrape_id))
+                    self._fetch_page(matches, params, session, self.BASE_API_URL, self._scrape_id)
+                )
                 tasks.append(task)
 
             await asyncio.gather(*tasks)
@@ -65,12 +61,12 @@ class BetClicScrapper(BaseScrapper[list[Serializable]]):
         )
 
     async def _fetch_page(
-            self,
-            matches: RD,
-            params: dict[str, Any],
-            session: ClientSession,
-            url: str,
-            scrape_id: UUID,
+        self,
+        matches: RD,
+        params: dict[str, Any],
+        session: ClientSession,
+        url: str,
+        scrape_id: UUID,
     ) -> None:
         async with session.get(url, params=params) as response:
             json_response = await response.json()

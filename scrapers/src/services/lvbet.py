@@ -5,14 +5,14 @@ from typing import Any, DefaultDict, Final
 import aiohttp
 
 from src.enums import Bookmaker, FootballOutcome
-from src.services.base import RD, BaseScrapper, Serializable
 from src.schemas.base import FootballMatchData
-from src.settings import settings
+from src.services.base import RD, BaseScrapingService, Serializable
+from src.settings.settings import settings
 
 LV_BET_DAYS_TO_SCRAPE: Final[int] = settings.LV_BET_DAYS_TO_SCRAPE
 
 
-class LvBetScrapper(BaseScrapper[dict[Any, Any]]):
+class LvBetScrapingService(BaseScrapingService[dict[Any, Any]]):
     BASE_API_URL = "https://offer.lvbet.pl/client-api/v4/matches/competition-view/?lang=en&sports_groups_ids=1&sports_groups_ids=36530&sports_groups_ids=37609"  # noqa #pylint: disable=line-too-long
 
     @property
@@ -20,20 +20,21 @@ class LvBetScrapper(BaseScrapper[dict[Any, Any]]):
         return Bookmaker.LVBET
 
     @staticmethod
-    def _get_request_timeframe(days_to_scrape: int = LV_BET_DAYS_TO_SCRAPE) -> str:
+    def _get_request_timeframe(days_to_scrape: int = LV_BET_DAYS_TO_SCRAPE) -> dict[str, str]:
         now = datetime.utcnow()
         date_from = now - timedelta(hours=12)
         date_to = now + timedelta(days=days_to_scrape)
 
-        s_date_from = date_from.strftime("%Y-%m-%d% 00:00")  # TODO move to params & partition into smaller chunks
+        s_date_from = date_from.strftime("%Y-%m-%d 00:00")  # TODO move to params & partition into smaller chunks
         s_date_to = date_to.strftime("%Y-%m-%d 00:00")
-        parameters = f"&date_from={s_date_from}&date_to={s_date_to}"
+        parameters = {"date_from": s_date_from,
+                      "date_to": s_date_to}
         return parameters
 
     async def acquire_raw_data(self) -> dict[Any, Any]:
         date_parameters = self._get_request_timeframe()
         async with aiohttp.ClientSession() as session:
-            async with session.get(self.BASE_API_URL + date_parameters) as response:
+            async with session.get(self.BASE_API_URL, params=date_parameters) as response:
                 data: dict[Any, Any] = await response.json()
                 return data
 
@@ -60,13 +61,13 @@ class LvBetScrapper(BaseScrapper[dict[Any, Any]]):
             bet_options={
                 FootballOutcome.TEAM_A_WINS: raw_datapoint["selections"][0]["rate"]["decimal"],
                 FootballOutcome.DRAW: raw_datapoint["selections"][1]["rate"]["decimal"],
-                FootballOutcome.TEAM_B_WINS: raw_datapoint["selections"][2]["rate"]["decimal"]
+                FootballOutcome.TEAM_B_WINS: raw_datapoint["selections"][2]["rate"]["decimal"],
             },
         )
 
 
 async def main() -> None:
-    lvbet = LvBetScrapper()
+    lvbet = LvBetScrapingService()
     await lvbet.scrape()
 
 

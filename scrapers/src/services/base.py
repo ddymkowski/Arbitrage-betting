@@ -4,14 +4,12 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from pprint import pformat
 from typing import Any, Generic, TypeVar
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from pydantic import ValidationError
 
 from src.enums import Bookmaker
 from src.schemas.base import FootballMatchData, FootballMatchDataDTO
-
-
 
 logging.basicConfig(
     format="%(asctime)s | %(name)s | %(funcName)s | %(levelname)s: %(message)s",
@@ -22,22 +20,28 @@ RD = TypeVar("RD", bound=Any)
 Serializable = dict[str, Any]
 
 
-class BaseScrapper(ABC, Generic[RD]):
+class BaseScrapingService(ABC, Generic[RD]):
     @property
     @abstractmethod
     def bookmaker(self) -> Bookmaker:
         pass
 
-    def __init__(self, ):
+    def __init__(
+        self,
+    ):
         self._logger = logging.getLogger(self.__class__.__qualname__)
-        self.scrape_id = uuid4()
-        self.scrapping_start_timestamp = datetime.utcnow()
+        self._scrape_id = uuid4()
+        self._scrapping_start_timestamp = datetime.utcnow()
 
         self._logger.info(
             "Starting %s job with id: %s",
             {self.__class__.__qualname__},
-            {self.scrape_id},
+            {self._scrape_id},
         )
+
+    @property
+    def scrape_id(self) -> UUID:
+        return self._scrape_id
 
     @abstractmethod
     async def acquire_raw_data(self) -> RD:
@@ -52,8 +56,7 @@ class BaseScrapper(ABC, Generic[RD]):
         pass
 
     def _enrich_data_with_scrape_metadata(
-            self,
-            serialized_data: list[FootballMatchData]
+        self, serialized_data: list[FootballMatchData]
     ) -> list[FootballMatchDataDTO]:
         scrape_end_timestamp = datetime.utcnow()
         enriched_db_ready_data = [
@@ -62,9 +65,9 @@ class BaseScrapper(ABC, Generic[RD]):
                 team_a=scrape_result.team_a,
                 team_b=scrape_result.team_b,
                 bet_options=scrape_result.bet_options,
-                scrape_id=self.scrape_id,
+                scrape_id=self._scrape_id,
                 source=self.bookmaker,
-                scrape_start_timestamp=self.scrapping_start_timestamp,
+                scrape_start_timestamp=self._scrapping_start_timestamp,
                 scrape_end_timestamp=scrape_end_timestamp,
             )
             for scrape_result in serialized_data
@@ -99,7 +102,5 @@ class BaseScrapper(ABC, Generic[RD]):
         raw_data: RD = await self.acquire_raw_data()
         serializable_data: list[Serializable] = self.preprocess_raw_data(raw_data)
         serialized_data: list[FootballMatchData] = self._serialize_data(serializable_data)
-        enriched_serialized_data: list[FootballMatchDataDTO] = self._enrich_data_with_scrape_metadata(
-            serialized_data
-        )
+        enriched_serialized_data: list[FootballMatchDataDTO] = self._enrich_data_with_scrape_metadata(serialized_data)
         return enriched_serialized_data

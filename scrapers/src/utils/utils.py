@@ -3,19 +3,15 @@ import json
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from uuid import UUID, uuid4
+from uuid import UUID
 
 from pydantic import BaseModel
 
 
-def generate_uuid() -> str:
-    return str(uuid4())
-
-
-class CustomEncoder(json.JSONEncoder):
+class FootballMatchDTOJSONEncoder(json.JSONEncoder):
     def default(self, o) -> Any:
         if isinstance(o, UUID):
-            return o.hex
+            return str(o)
 
         if isinstance(o, Enum):
             return o.value
@@ -32,5 +28,3 @@ class CustomEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
-def custom_json_serializer(dikt: dict[Any, Any]) -> dict[Any, Any]:
-    return json.dumps(dikt, cls=CustomEncoder)

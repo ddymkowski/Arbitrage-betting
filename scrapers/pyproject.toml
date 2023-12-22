@@ -12,6 +12,7 @@ asyncio = "^3.4.3"
 pydantic = "1.9.0"
 fastapi = "^0.105.0"
 uvicorn = {extras = ["standard"], version = "^0.25.0"}
+aio-pika = "^9.3.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -23,3 +24,28 @@ pytest = "^7.4.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.env
+  | \.venv
+  | venv
+  | env
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+line_length = 119
+lines_after_imports = 2
+profile = "black"
+skip_glob = ["**/env/*", "**/venv/*"]
