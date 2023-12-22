@@ -4,10 +4,10 @@ services:
   scrapers:
     container_name: scrapers
     build:
-      context: .
+      context: scrapers
       dockerfile: docker/python.Dockerfile
     env_file:
-      - .env
+      - scrapers/.env
     ports:
       - "8000:8000"
     restart: always
