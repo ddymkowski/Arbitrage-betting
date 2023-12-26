@@ -5,17 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81695602-62d7-49c3-8737-4717d412929f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/.env.template" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/database.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/docker/python.Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/deps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/enums.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/models/football_match.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/rabbit.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/schemas/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/schemas/consumer_match.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/services/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/services/name_standardization.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/services/resources/club_names_synonyms.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/settings/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/settings/rabbit.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/settings/scrapers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/matcher/src/settings/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/matcher/.mypy_cache/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/matcher/.mypy_cache/CACHEDIR.TAG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/src/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/src/constants.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/src/database.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/src/enums.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/src/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/src/scheduler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrapers/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.pre-commit-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.pre-commit-config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/engine/engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/engine/engine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/matcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/matcher/matcher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/matcher/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/event/naive.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/matcher/strategy/event/naive.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matcher/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matcher/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matcher/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/poetry.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matcher/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matcher/src/database.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matcher/src/models/base.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/src/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/src/schemas/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/schemas/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/src/services/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/src/services/betclic.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/betclic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/src/services/lvbet.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/lvbet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/src/utils/rabbit.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/utils/rabbit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/src/utils/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/utils/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,21 +74,22 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/damiandymkowski/Desktop/Code/Personal/moneyprinter/matcher&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/damiandymkowski/Desktop/Code/Personal/moneyprinter&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/matcher" />
       <recent name="$PROJECT_DIR$/bin" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/matcher" />
+      <recent name="$PROJECT_DIR$/matcher/src" />
       <recent name="$PROJECT_DIR$/bin" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/scrapers" />
-      <recent name="$PROJECT_DIR$/scrapers/src" />
-      <recent name="$PROJECT_DIR$/scrapers/src/services" />
     </key>
   </component>
   <component name="RunManager" selected="Python.main (2)">
@@ -174,5 +202,15 @@
       <updated>1687419955144</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/matcher/src/models/football_match.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

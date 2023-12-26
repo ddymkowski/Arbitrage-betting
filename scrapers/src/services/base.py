@@ -7,7 +7,6 @@ from typing import Any, Generic, TypeVar
 from uuid import UUID, uuid4
 
 from pydantic import ValidationError
-
 from src.enums import Bookmaker
 from src.schemas.base import FootballMatchData, FootballMatchDataDTO
 
@@ -74,7 +73,9 @@ class BaseScrapingService(ABC, Generic[RD]):
         ]
         return enriched_db_ready_data
 
-    def _serialize_data(self, serializable_data: list[Serializable]) -> list[FootballMatchData]:
+    def _serialize_data(
+        self, serializable_data: list[Serializable]
+    ) -> list[FootballMatchData]:
         standardized_data = []
         exceptions = []
 
@@ -90,10 +91,14 @@ class BaseScrapingService(ABC, Generic[RD]):
 
         exceptions_count = len(exceptions)
         self._logger.warning("Validation errors count: %s\n", {exceptions_count})
-        self._logger.info("Successfully parsed: %s matches.\n", {len(standardized_data)})
+        self._logger.info(
+            "Successfully parsed: %s matches.\n", {len(standardized_data)}
+        )
 
         if exceptions_count > (0.5 * len(serializable_data)):
-            self._logger.error("More than 50% of raw data could not be parsed properly check logs.")
+            self._logger.error(
+                "More than 50% of raw data could not be parsed properly check logs."
+            )
             self._logger.error({pformat(exceptions)})
 
         return standardized_data
@@ -101,6 +106,10 @@ class BaseScrapingService(ABC, Generic[RD]):
     async def scrape(self) -> list[FootballMatchDataDTO]:
         raw_data: RD = await self.acquire_raw_data()
         serializable_data: list[Serializable] = self.preprocess_raw_data(raw_data)
-        serialized_data: list[FootballMatchData] = self._serialize_data(serializable_data)
-        enriched_serialized_data: list[FootballMatchDataDTO] = self._enrich_data_with_scrape_metadata(serialized_data)
+        serialized_data: list[FootballMatchData] = self._serialize_data(
+            serializable_data
+        )
+        enriched_serialized_data: list[
+            FootballMatchDataDTO
+        ] = self._enrich_data_with_scrape_metadata(serialized_data)
         return enriched_serialized_data

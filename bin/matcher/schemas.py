@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
 from src.enums import Bookmaker
-from scrapers.src.schemas import ScrapeResultModelEnriched, ScrapeResultModel
 
+from scrapers.src.schemas import ScrapeResultModel, ScrapeResultModelEnriched
 
 BookmakersDatasets = dict[Bookmaker, list[ScrapeResultModelEnriched]]
 

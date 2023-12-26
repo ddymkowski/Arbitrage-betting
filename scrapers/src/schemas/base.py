@@ -2,7 +2,6 @@ from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel, validator
-
 from src.enums import Bookmaker, FootballOutcome
 
 
@@ -13,7 +12,9 @@ class FootballMatchData(BaseModel):
     bet_options: dict[FootballOutcome, float]
 
     @validator("bet_options")
-    def validate_positive_floats(cls, v: dict[FootballOutcome, float]) -> dict[FootballOutcome, float]:
+    def validate_positive_floats(
+        cls, v: dict[FootballOutcome, float]
+    ) -> dict[FootballOutcome, float]:
         for key, value in v.items():
             if value <= 0:
                 raise ValueError("Odds cannot be equal or less than 0.0")

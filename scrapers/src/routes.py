@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request
-
 from src.services.betclic import BetClicScrapingService
 from src.services.lvbet import LvBetScrapingService
 

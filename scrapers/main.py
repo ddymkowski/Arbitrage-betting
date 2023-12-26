@@ -1,10 +1,8 @@
 from aio_pika import ExchangeType
 from fastapi import FastAPI
-
-from src.utils.rabbit import RabbitMQClient
 from src.routes import router
 from src.settings.settings import settings
-
+from src.utils.rabbit import RabbitMQClient
 
 EXCHANGE_NAME = settings.RABBIT_PUBLISHING_EXCHANGE_NAME
 QUEUE_NAME = settings.RABBIT_PUBLISHING_QUEUE_NAME
@@ -22,7 +20,9 @@ async def startup_event() -> None:
         settings.RABBIT_PASSWORD,
     )
 
-    exchange = await app.state.mq.channel.declare_exchange(EXCHANGE_NAME, ExchangeType.FANOUT)
+    exchange = await app.state.mq.channel.declare_exchange(
+        EXCHANGE_NAME, ExchangeType.FANOUT
+    )
     queue = await app.state.mq.channel.declare_queue(QUEUE_NAME)
     await queue.bind(exchange=exchange)
 

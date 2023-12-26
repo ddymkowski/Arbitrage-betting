@@ -2,17 +2,14 @@ import logging
 
 from src.enums import Bookmaker
 from src.matcher.schemas import BookmakersDatasets
-from src.matcher.strategy.entity import (
-    BaseEntityMatchingStrategy,
-    NaiveEntityMatchingStrategy,
-)
-from src.matcher.strategy.event import (
-    BaseEventMatchingStrategy,
-    NaiveEventMatchingStrategy,
-)
-from scrapers.src.schemas import ScrapeResultModelEnriched
+from src.matcher.strategy.entity import (BaseEntityMatchingStrategy,
+                                         NaiveEntityMatchingStrategy)
+from src.matcher.strategy.event import (BaseEventMatchingStrategy,
+                                        NaiveEventMatchingStrategy)
 from src.storage.data_access.base import BaseRepository
 from src.storage.data_access.sqlite import SqliteRepository
+
+from scrapers.src.schemas import ScrapeResultModelEnriched
 
 logging.basicConfig(
     format="%(asctime)s | %(name)s | %(funcName)s | %(levelname)s: %(message)s",
@@ -35,17 +32,22 @@ class MatchMatcher:
         self._database = database
 
     def _check_timedelta(self, timestamps: list[dict[str, str]]) -> None:
-        sorted_datetimes = sorted(timestamps, key=lambda entry: entry["scrape_end_timestamp"])
+        sorted_datetimes = sorted(
+            timestamps, key=lambda entry: entry["scrape_end_timestamp"]
+        )
         time_deltas = [
             (
-                sorted_datetimes[i + 1]["scrape_end_timestamp"] - sorted_datetimes[i]["scrape_end_timestamp"],
+                sorted_datetimes[i + 1]["scrape_end_timestamp"]
+                - sorted_datetimes[i]["scrape_end_timestamp"],
                 sorted_datetimes[i]["scrape_id"],
                 sorted_datetimes[i + 1]["scrape_id"],
             )
             for i in range(len(sorted_datetimes) - 1)
         ]
 
-        biggest_delta, id1, id2 = max(time_deltas, key=lambda timedelta_id: timedelta_id[0])
+        biggest_delta, id1, id2 = max(
+            time_deltas, key=lambda timedelta_id: timedelta_id[0]
+        )
 
         self._logger.info("Biggest time delta: %s", {biggest_delta})
         self._logger.info("IDs with the biggest gap: %s %s", {id1}, {id2})
@@ -70,7 +72,9 @@ class MatchMatcher:
         return {key: value for key, value in bookmaker_data.items() if value}
 
     def _get_newest_batches(self) -> BookmakersDatasets:
-        database_data: list[ScrapeResultModelEnriched] = self._database.get_most_recent_bulks()
+        database_data: list[
+            ScrapeResultModelEnriched
+        ] = self._database.get_most_recent_bulks()
         preprocessed_data = self._split_and_sort_data_by_bookmaker(database_data)
         self._logger.info(
             "Received bookmakers: %s, their datasets lengths: %s",
@@ -91,7 +95,11 @@ class MatchMatcher:
                 pass  # Do nothing for bookmakers that are in Enum but are not scrapped or failed to scrap
 
         self._check_timedelta(
-            [timestamp_id for timestamp_id in bookmaker_scrape_end.values() if timestamp_id is not None]
+            [
+                timestamp_id
+                for timestamp_id in bookmaker_scrape_end.values()
+                if timestamp_id is not None
+            ]
         )
 
     def match_entities(self):

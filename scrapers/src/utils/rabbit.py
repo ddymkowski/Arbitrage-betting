@@ -18,21 +18,23 @@ logging.basicConfig(
 class RabbitMQClient:
     @classmethod
     async def connect(
-            cls,
-            host: str,
-            port: int,
-            login: str,
-            password: str,
+        cls,
+        host: str,
+        port: int,
+        login: str,
+        password: str,
     ) -> RabbitMQClient:
-        connection = await connect_robust(host=host, port=port, login=login, password=password)
+        connection = await connect_robust(
+            host=host, port=port, login=login, password=password
+        )
 
         channel = await connection.channel(publisher_confirms=False)
         return cls(connection, channel)
 
     def __init__(
-            self,
-            connection: AbstractRobustConnection,
-            channel: AbstractChannel,
+        self,
+        connection: AbstractRobustConnection,
+        channel: AbstractChannel,
     ) -> None:
         self.connection: AbstractRobustConnection = connection
         self.channel: AbstractChannel = channel
@@ -45,12 +47,12 @@ class RabbitMQClient:
             await self.connection.close()
 
     async def send_messages(
-            self,
-            messages: list[dict[str, Any]] | dict[str, Any],
-            exchange: RobustExchange,
-            routing_key: str,
-            scrape_id: str,
-            bookmaker: Bookmaker,
+        self,
+        messages: list[dict[str, Any]] | dict[str, Any],
+        exchange: RobustExchange,
+        routing_key: str,
+        scrape_id: str,
+        bookmaker: Bookmaker,
     ) -> None:
         messages_count = len(messages)
 
@@ -62,7 +64,11 @@ class RabbitMQClient:
                 f"Starting publishing {messages_count} messages [scrape_id: {scrape_id}, bookmaker: {bookmaker.value}]"
             )
             for raw_message in messages:
-                message = Message(body=json.dumps(raw_message, cls=FootballMatchDTOJSONEncoder).encode())
+                message = Message(
+                    body=json.dumps(
+                        raw_message, cls=FootballMatchDTOJSONEncoder
+                    ).encode()
+                )
 
                 await exchange.publish(
                     message,

@@ -1,32 +1,48 @@
-version: "3.9"
+version: '3.9'
 
 services:
-  scrapers:
-    container_name: scrapers
-    build:
-      context: scrapers
-      dockerfile: docker/python.Dockerfile
-    env_file:
-      - scrapers/.env
-    ports:
-      - "8000:8000"
-    restart: always
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+    rabbitmq:
+        container_name: rabbitmq
+        image: rabbitmq:3.8-management-alpine
+        ports:
+        -   5672:5672
+        -   15672:15672
+        environment:
+            RABBITMQ_DEFAULT_USER: user
+            RABBITMQ_DEFAULT_PASS: pass
 
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3.8-management-alpine
-    ports:
-      - 5672:5672
-      - 15672:15672
-    environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: pass
+        healthcheck:
+            test: [CMD, nc, -z, localhost, '5672']
+            interval: 10s
+            timeout: 10s
+            retries: 5
 
-    healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+    scrapers:
+        container_name: scrapers
+        build:
+            context: scrapers
+            dockerfile: docker/python.Dockerfile
+        env_file:
+        -   scrapers/.env
+        ports:
+        -   8000:8000
+        restart: always
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+
+    matcher:
+        container_name: matcher
+        build:
+            context: matcher
+            dockerfile: docker/python.Dockerfile
+        env_file:
+        -   matcher/.env
+        ports:
+        -   8001:8001
+        restart: always
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+            scrapers:
+                condition: service_started

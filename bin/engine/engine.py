@@ -4,7 +4,6 @@ from pprint import pformat
 from typing import Optional
 
 from models import Bet, BetsSet, FootballMatch, Odds, Opportunity
-
 from src.enums import Bookmaker, FootballOutcome, PotentialBetState
 
 logging.basicConfig(
@@ -27,7 +26,9 @@ class ArbitrageMasker:
         multiplier_value: int,
         round_up: bool = True,
     ) -> float:
-        rounded_value = float(ceil(value_to_round / multiplier_value) * multiplier_value)
+        rounded_value = float(
+            ceil(value_to_round / multiplier_value) * multiplier_value
+        )
 
         if not round_up:
             return rounded_value - multiplier_value
@@ -122,7 +123,9 @@ class ArbitrageEngine:
         )
 
         bets_to_place_masked = self._masker.apply_arbitrage_masking(bets_to_place)
-        self._logger.info("Betting options masked: %s\n", {pformat(bets_to_place_masked)})
+        self._logger.info(
+            "Betting options masked: %s\n", {pformat(bets_to_place_masked)}
+        )
 
         total_bet_value_masked = bets_to_place_masked.get_total_bets_amount()
         print(bets_to_place_masked.get_win_per_bet())
@@ -150,7 +153,9 @@ class ArbitrageEngine:
         )
 
     @staticmethod
-    def _calculate_odds_probabilities(best_betting_options: dict[FootballOutcome, dict[Bookmaker, Odds]]) -> float:
+    def _calculate_odds_probabilities(
+        best_betting_options: dict[FootballOutcome, dict[Bookmaker, Odds]]
+    ) -> float:
         probability = 0.0
         for bookmaker in best_betting_options.values():
             for odds in bookmaker.values():

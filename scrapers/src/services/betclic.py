@@ -3,7 +3,6 @@ from typing import Any, Final
 from uuid import UUID
 
 from aiohttp import ClientSession
-
 from src.enums import Bookmaker, FootballOutcome
 from src.schemas.base import FootballMatchData
 from src.services.base import RD, BaseScrapingService
@@ -26,7 +25,9 @@ class BetClicScrapingService(BaseScrapingService[list[Serializable]]):
     def bookmaker(self):
         return Bookmaker.BETCLIC
 
-    async def acquire_raw_data(self, limit: int = BETCLIC_API_LIMIT, pages: int = BETCLIC_PAGES) -> list[Serializable]:
+    async def acquire_raw_data(
+        self, limit: int = BETCLIC_API_LIMIT, pages: int = BETCLIC_PAGES
+    ) -> list[Serializable]:
         tasks = []
         offsets = [page * limit for page in range(pages)]
 
@@ -36,7 +37,9 @@ class BetClicScrapingService(BaseScrapingService[list[Serializable]]):
             for offset in offsets:
                 params = {"offset": offset, "limit": limit}
                 task = asyncio.create_task(
-                    self._fetch_page(matches, params, session, self.BASE_API_URL, self._scrape_id)
+                    self._fetch_page(
+                        matches, params, session, self.BASE_API_URL, self._scrape_id
+                    )
                 )
                 tasks.append(task)
 
@@ -75,4 +78,6 @@ class BetClicScrapingService(BaseScrapingService[list[Serializable]]):
                 matches.extend(json_response["matches"])
                 return
 
-            self._logger.warning(f"ID: {scrape_id} - {url}:{response.status} - {json_response}\n")
+            self._logger.warning(
+                f"ID: {scrape_id} - {url}:{response.status} - {json_response}\n"
+            )

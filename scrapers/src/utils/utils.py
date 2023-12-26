@@ -26,5 +26,3 @@ class FootballMatchDTOJSONEncoder(json.JSONEncoder):
             return dataclasses.asdict(o)
 
         return json.JSONEncoder.default(self, o)
-
-
