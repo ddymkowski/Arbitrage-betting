@@ -5,44 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81695602-62d7-49c3-8737-4717d412929f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/.env.template" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/docker/python.Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/deps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/enums.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/models/football_match.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/rabbit.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/schemas/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/schemas/consumer_match.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/services/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/services/name_standardization.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/services/resources/club_names_synonyms.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/settings/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/settings/rabbit.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/settings/scrapers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/matcher/src/settings/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.pre-commit-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.pre-commit-config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/engine/engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/engine/engine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/matcher/matcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/matcher/matcher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/matcher/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/matcher/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/event/naive.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/matcher/strategy/event/naive.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/engine/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/engine/engine.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/engine/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/matcher.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/schemas.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/entity/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/entity/base.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/entity/naive.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/event/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/event/base.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/matcher/strategy/event/naive.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matcher/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/matcher/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matcher/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matcher/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matcher/src/database.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/matcher/src/models/base.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrapers/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matcher/src/enums.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/src/enums.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matcher/src/schemas/consumer_match.py" beforeDir="false" afterPath="$PROJECT_DIR$/matcher/src/schemas/consumer_match.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrapers/src/enums.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/enums.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scrapers/src/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrapers/src/schemas/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/schemas/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrapers/src/services/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrapers/src/services/betclic.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/betclic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scrapers/src/services/lvbet.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/services/lvbet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrapers/src/utils/rabbit.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/utils/rabbit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrapers/src/utils/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrapers/src/utils/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

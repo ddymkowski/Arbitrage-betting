@@ -37,6 +37,21 @@ class FootballMatch:
 
         return cls(**match_data)
 
+    @classmethod
+    def from_sqlalchemy_model(cls, model: FootballMatchModel) -> FootballMatch:
+        return cls(
+            event_time=model.event_time,
+            team_a=model.team_a,
+            team_b=model.team_b,
+            team_a_standardized=model.team_a_standardized,
+            team_b_standardized=model.team_b_standardized,
+            bet_options=model.bet_options,
+            scrape_id=model.scrape_id,
+            source=model.source,
+            scrape_start_timestamp=model.scrape_start_timestamp,
+            scrape_end_timestamp=model.scrape_end_timestamp,
+        )
+
     def to_sqlalchemy_model(self) -> FootballMatchModel:
         match_dict = asdict(self)
         return FootballMatchModel(**match_dict)

@@ -31,18 +31,18 @@ services:
             rabbitmq:
                 condition: service_healthy
 
-    matcher:
-        container_name: matcher
-        build:
-            context: matcher
-            dockerfile: docker/python.Dockerfile
-        env_file:
-        -   matcher/.env
-        ports:
-        -   8001:8001
-        restart: always
-        depends_on:
-            rabbitmq:
-                condition: service_healthy
-            scrapers:
-                condition: service_started
+#    matcher:
+#        container_name: matcher
+#        build:
+#            context: matcher
+#            dockerfile: docker/python.Dockerfile
+#        env_file:
+#        -   matcher/.env
+#        ports:
+#        -   8001:8001
+#        restart: always
+#        depends_on:
+#            rabbitmq:
+#                condition: service_healthy
+#            scrapers:
+#                condition: service_started

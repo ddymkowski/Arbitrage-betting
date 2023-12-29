@@ -26,9 +26,7 @@ class LvBetScrapingService(BaseScrapingService[dict[Any, Any]]):
         date_from = now - timedelta(hours=12)
         date_to = now + timedelta(days=days_to_scrape)
 
-        s_date_from = date_from.strftime(
-            "%Y-%m-%d 00:00"
-        )  # TODO move to params & partition into smaller chunks
+        s_date_from = date_from.strftime("%Y-%m-%d 00:00")
         s_date_to = date_to.strftime("%Y-%m-%d 00:00")
         parameters = {"date_from": s_date_from, "date_to": s_date_to}
         return parameters
