@@ -12,6 +12,7 @@ sqlalchemy = "^2.0.23"
 uvicorn = {extras = ["standard"], version = "^0.25.0"}
 aio-pika = "^9.3.1"
 pydantic = "1.9.0"
+python-levenshtein = "^0.23.0"
 
 
 [build-system]

@@ -1,5 +1,6 @@
-from database import Base
 from sqlalchemy import JSON, Column, DateTime, String
+
+from database import Base
 
 
 class FootballMatchModel(Base):
