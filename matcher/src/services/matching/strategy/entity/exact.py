@@ -5,7 +5,9 @@ from src.services.matching.strategy.entity.base import \
 
 class ExactEntityComparisonStrategy(BaseEntityMatchingStrategy):
     @staticmethod
-    def match_entities(first_entity: FootballMatch, second_entity: FootballMatch):
+    def match_entities(
+        first_entity: FootballMatch, second_entity: FootballMatch
+    ) -> bool:
         if first_entity.team_a_standardized != second_entity.team_a_standardized:
             return False
 

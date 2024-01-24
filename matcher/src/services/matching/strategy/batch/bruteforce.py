@@ -30,7 +30,7 @@ class BruteForceMatchingStrategy(BaseEventMatchingStrategy):
         bookmaker_name_with_most_listings: str = max(data, key=lambda x: data[x].count)
         longest_data: Batch = data.pop(bookmaker_name_with_most_listings)
 
-        clusters: list[list[FootballMatch]] = []
+        matched_football_events_across_bookmakers: list[list[FootballMatch]] = []
         for match in longest_data.matches:
             club_cluster: list[FootballMatch] = [match]
             for bookmaker in data.keys():
@@ -42,6 +42,6 @@ class BruteForceMatchingStrategy(BaseEventMatchingStrategy):
                         continue
 
             if len(club_cluster) >= self.MINIMUM_CLUSTER_LENGTH:
-                clusters.append(club_cluster)
+                matched_football_events_across_bookmakers.append(club_cluster)
 
-        return clusters
+        return matched_football_events_across_bookmakers

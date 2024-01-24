@@ -7,5 +7,5 @@ class RabbitMQSettings(BaseSettings):
     RABBIT_LOGIN: str = "user"
     RABBIT_PASSWORD: str = "pass"
 
-    RABBIT_PUBLISHING_EXCHANGE_NAME: str = "scraper-pub"
-    RABBIT_PUBLISHING_QUEUE_NAME: str = "scraper_queue"
+    RABBIT_PUBLISHING_EXCHANGE_NAME: str = "matcher-pub"
+    RABBIT_PUBLISHING_QUEUE_NAME: str = "matcher_queue"

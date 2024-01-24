@@ -27,7 +27,7 @@ async def startup_event() -> None:
     await queue.bind(exchange=exchange)
 
     app.state.exchange = exchange
-    app.state.queue = queue
+    app.state.sub_queue = queue
 
 
 @app.on_event("shutdown")

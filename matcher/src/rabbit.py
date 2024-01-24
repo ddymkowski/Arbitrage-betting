@@ -6,7 +6,6 @@ from functools import partial
 from aio_pika import Message, RobustQueue, connect_robust
 from aio_pika.abc import AbstractChannel, AbstractRobustConnection
 from sqlalchemy.orm import Session
-
 from src.deps import get_database
 from src.schemas.consumer_match import FootballMatch
 from src.services.name_standardization import \

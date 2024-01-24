@@ -1,7 +1,6 @@
 import logging
 
 from sqlalchemy.orm import Session
-
 from src.data_access.base import SyncSQLAlchemyDataAccess
 from src.schemas.consumer_match import FootballMatch
 from src.services.matching.data import Batch
@@ -20,7 +19,7 @@ class FootballEventMatchingService:
         data_access: SyncSQLAlchemyDataAccess,
         batch_matching_strategy: BaseEventMatchingStrategy = None,
         entity_matching_strategy: BaseEntityMatchingStrategy = None,
-    ):
+    ) -> None:
         self._logger = logging.getLogger(self.__class__.__qualname__)
         self._data_access = data_access
         self._entity_matching_strategy = (

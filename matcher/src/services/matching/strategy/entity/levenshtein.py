@@ -1,5 +1,4 @@
 from Levenshtein import ratio
-
 from src.schemas.consumer_match import FootballMatch
 from src.services.matching.strategy.entity.base import \
     BaseEntityMatchingStrategy
@@ -10,6 +9,7 @@ class LevenshteinDistanceEntityComparisonStrategy(BaseEntityMatchingStrategy):
 
     @staticmethod
     def preprocess(text: str) -> str:
+        # TODO remove FC/F.C. case insensitive
         return text
 
     def match_entities(
